@@ -1,0 +1,406 @@
+{% doc %}
+  @prompt
+    i want to add the custom font for the H1 on full site so i will select the font side, weight, line height also., i want to add the custom font into it as the format oflink
+
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% if block.settings.custom_font_url != blank %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="{{ block.settings.custom_font_url }}" rel="stylesheet">
+{% endif %}
+
+{% style %}
+  .ai-global-h1-font-{{ ai_gen_id }} {
+    display: none;
+  }
+
+  h1,
+  .h1 {
+    {% if block.settings.use_custom_font and block.settings.custom_font_name != blank %}
+      font-family: "{{ block.settings.custom_font_name }}", {{ block.settings.fallback_fonts }};
+    {% elsif block.settings.font_family != blank %}
+      font-family: {{ block.settings.font_family.family }}, {{ block.settings.font_family.fallback_families }};
+      font-weight: {{ block.settings.font_family.weight }};
+    {% endif %}
+    {% if block.settings.font_size > 0 %}
+      font-size: {{ block.settings.font_size }}px !important;
+    {% endif %}
+    {% if block.settings.font_weight != blank %}
+      font-weight: {{ block.settings.font_weight }} !important;
+    {% endif %}
+    {% if block.settings.line_height > 0 %}
+      line-height: {{ block.settings.line_height }}px !important;
+    {% endif %}
+    {% if block.settings.letter_spacing != blank %}
+      letter-spacing: {{ block.settings.letter_spacing }} !important;
+    {% endif %}
+    {% if block.settings.text_transform != blank %}
+      text-transform: {{ block.settings.text_transform }} !important;
+    {% endif %}
+    {% if block.settings.font_style != blank %}
+      font-style: {{ block.settings.font_style }} !important;
+    {% endif %}
+    {% if block.settings.text_color != blank %}
+      color: {{ block.settings.text_color }} !important;
+    {% endif %}
+    {% if block.settings.margin_top >= 0 %}
+      margin-top: {{ block.settings.margin_top }}px !important;
+    {% endif %}
+    {% if block.settings.margin_bottom >= 0 %}
+      margin-bottom: {{ block.settings.margin_bottom }}px !important;
+    {% endif %}
+  }
+
+  @media screen and (max-width: 749px) {
+    h1,
+    .h1 {
+      {% if block.settings.mobile_font_size > 0 %}
+        font-size: {{ block.settings.mobile_font_size }}px !important;
+      {% endif %}
+      {% if block.settings.mobile_line_height > 0 %}
+        line-height: {{ block.settings.mobile_line_height }}px !important;
+      {% endif %}
+      {% if block.settings.mobile_margin_top >= 0 %}
+        margin-top: {{ block.settings.mobile_margin_top }}px !important;
+      {% endif %}
+      {% if block.settings.mobile_margin_bottom >= 0 %}
+        margin-bottom: {{ block.settings.mobile_margin_bottom }}px !important;
+      {% endif %}
+    }
+  }
+
+  {% if block.settings.enable_text_shadow %}
+    h1,
+    .h1 {
+      text-shadow: {{ block.settings.shadow_x }}px {{ block.settings.shadow_y }}px {{ block.settings.shadow_blur }}px {{ block.settings.shadow_color }};
+    }
+  {% endif %}
+
+  {% if block.settings.enable_custom_styles %}
+    h1,
+    .h1 {
+      {{ block.settings.custom_css }}
+    }
+  {% endif %}
+{% endstyle %}<div class="ai-global-h1-font-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div style="padding: 20px; background: #f8f8f8; border-radius: 8px; text-align: center; color: #666; font-size: 14px;">
+    <h3style="margin: 0 0 10px; color: #333; font-size: 16px;">Global H1 Font Settings Active</h3>
+    <p style="margin: 0;">This block controls the typography for all H1 headings across your site. The settings are applied globally and this message is only visible in the theme editor.</p>
+    {% if block.settings.use_custom_font and block.settings.custom_font_url != blank %}
+      <p style="margin: 10px 00; font-size: 12px; color: #888;">Custom font loaded: {{ block.settings.custom_font_name }}</p>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Global H1 font settings",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Font source"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_font",
+      "label": "Use custom font link",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "custom_font_url",
+      "label": "Custom font URL",
+      "info": "Enter Google Fonts or other font service URL (e.g., https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap)"
+    },
+    {
+      "type": "text",
+      "id": "custom_font_name",
+      "label": "Custom font name",
+      "info": "Enter the exact font family name (e.g., Roboto, Open Sans)"
+    },
+    {
+      "type": "select",
+      "id": "fallback_fonts",
+      "label": "Fallback fonts",
+      "options": [
+        {
+          "value": "sans-serif",
+          "label": "Sans-serif"
+        },
+        {
+          "value": "serif",
+          "label": "Serif"
+        },
+        {
+          "value": "monospace",
+          "label": "Monospace"
+        },
+        {
+          "value": "cursive",
+          "label": "Cursive"
+        },
+        {
+          "value": "fantasy",
+          "label": "Fantasy"
+        }
+      ],
+      "default": "sans-serif"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_family",
+      "label": "Shopify font family",
+      "info": "Used when custom font is disabled",
+      "default": "helvetica_n4"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 16,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": "Font size",
+      "default": 32
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra bold"
+        },
+        {
+          "value": "900",
+          "label": "Black"
+        }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "range",
+      "id": "line_height",
+      "min": 20,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "label": "Line height",
+      "default": 40
+    },
+    {
+      "type": "text",
+      "id": "letter_spacing",
+      "label": "Letter spacing",
+      "default": "0em"
+    },
+    {
+      "type": "select",
+      "id": "text_transform",
+      "label": "Text transform",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        },
+        {
+          "value": "lowercase",
+          "label": "Lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Capitalize"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "font_style",
+      "label": "Font style",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "italic",
+          "label": "Italic"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin bottom",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Mobile settings"
+    },
+    {
+      "type": "range",
+      "id": "mobile_font_size",
+      "min": 14,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile font size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "mobile_line_height",
+      "min": 16,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile line height",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "mobile_margin_top",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile margin top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mobile_margin_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile margin bottom",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Text shadow"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_text_shadow",
+      "label": "Enable text shadow",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "shadow_x",
+      "min": -10,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Shadow horizontal offset",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "shadow_y",
+      "min": -10,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Shadow vertical offset",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "shadow_blur",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Shadow blur",
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "shadow_color",
+      "label": "Shadow color",
+      "default": "rgba(0,0,0,0.3)"
+    },
+    {
+      "type": "header",
+      "content": "Advanced"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_styles",
+      "label": "Enable custom CSS",
+      "default": false
+    },
+    {
+      "type": "textarea",
+      "id": "custom_css",
+      "label": "Custom CSS"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Global H1 font settings"
+    }
+  ],
+  "tag": null
+}
+{% endschema %}

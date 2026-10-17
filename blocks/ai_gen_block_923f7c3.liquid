@@ -1,0 +1,919 @@
+{% doc %}
+  @prompt
+    I want to create a horizontal filter bar section for the collection page. The filter bar should display all filter and sort options such as “Sort & Filter,” “Size,” and “Category” on the left side in a single horizontal line. On the right side, there should be grid view icons allowing users to switch between 1, 2, 3, or 4 products per row. The filters should automatically update the products below when selected, without reloading the page (AJAX filtering). Please use placeholders instead of labels for a clean look. I also want an option to toggle (show or hide) the grid view icons. Additionally, include an option to make the filter bar sticky at the top with customizable top spacing. Finally, please add a category selection dropdown within the filters., also provide option for the size & color
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-filter-bar-{{ ai_gen_id }} {
+    background-color: {{ block.settings.background_color }};
+    border: {{ block.settings.border_width }}px solid {{ block.settings.border_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+    padding: {{ block.settings.padding_vertical }}px {{ block.settings.padding_horizontal }}px;
+    margin-bottom: {{ block.settings.margin_bottom }}px;
+    {% if block.settings.enable_sticky %}
+      position: sticky;
+      top: {{ block.settings.sticky_top_spacing }}px;
+      z-index: 100;
+    {% endif %}
+  }
+
+  .ai-filter-bar-container-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    max-width: 100%;
+  }
+
+  .ai-filter-bar-left-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+
+  .ai-filter-bar-right-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    {% unless block.settings.show_grid_view %}
+      display: none;
+    {% endunless %}
+  }
+
+  .ai-filter-dropdown-{{ ai_gen_id }} {
+    position: relative;
+    display: inline-block;
+  }
+
+  .ai-filter-button-{{ ai_gen_id }} {
+    background-color: {{ block.settings.filter_button_bg }};
+    color: {{ block.settings.filter_button_text }};
+    border: 1px solid {{ block.settings.filter_button_border }};
+    border-radius: {{ block.settings.filter_button_radius }}px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    justify-content: space-between;
+  }
+
+  .ai-filter-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.filter_button_hover_bg }};
+    color: {{ block.settings.filter_button_hover_text }};
+  }
+
+  .ai-filter-button-{{ ai_gen_id }}.active {
+    background-color: {{ block.settings.filter_button_active_bg }};
+    color: {{ block.settings.filter_button_active_text }};
+  }
+
+  .ai-filter-dropdown-content-{{ ai_gen_id }} {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: {{ block.settings.dropdown_bg }};
+    border: 1px solid {{ block.settings.dropdown_border }};
+    border-radius: {{ block.settings.dropdown_radius }}px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 200px;
+    max-height: 300px;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+  }
+
+  .ai-filter-dropdown-content-{{ ai_gen_id }}.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .ai-filter-option-{{ ai_gen_id }} {
+    padding: 10px 16px;
+    cursor: pointer;
+    color: {{ block.settings.dropdown_text }};
+    border-bottom: 1px solid {{ block.settings.dropdown_border }};
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ai-filter-option-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.dropdown_hover_bg }};
+  }
+
+  .ai-filter-option-{{ ai_gen_id }}:last-child {
+    border-bottom: none;
+  }
+
+  .ai-filter-option-{{ ai_gen_id }}.selected {
+    background-color: {{ block.settings.dropdown_selected_bg }};
+    color: {{ block.settings.dropdown_selected_text }};
+  }
+
+  .ai-color-swatch-{{ ai_gen_id }} {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    display: inline-block;
+  }
+
+  .ai-grid-view-controls-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ai-grid-view-label-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: {{ block.settings.grid_label_color }};
+    margin-right: 5px;
+  }
+
+  .ai-grid-view-button-{{ ai_gen_id }} {
+    width: 32px;
+    height: 32px;
+    border: 1px solid {{ block.settings.grid_button_border }};
+    background-color: {{ block.settings.grid_button_bg }};
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+
+  .ai-grid-view-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.grid_button_hover_bg }};
+  }
+
+  .ai-grid-view-button-{{ ai_gen_id }}.active {
+    background-color: {{ block.settings.grid_button_active_bg }};
+    border-color: {{ block.settings.grid_button_active_border }};
+  }
+
+  .ai-grid-view-button-{{ ai_gen_id }} svg {
+    width: 16px;
+    height: 16px;
+    fill: {{ block.settings.grid_button_icon }};
+  }
+
+  .ai-grid-view-button-{{ ai_gen_id }}.active svg {
+    fill: {{ block.settings.grid_button_active_icon }};
+  }
+
+  .ai-filter-arrow-{{ ai_gen_id }} {
+    width: 12px;
+    height: 12px;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-filter-button-{{ ai_gen_id }}.active .ai-filter-arrow-{{ ai_gen_id }} {
+    transform: rotate(180deg);
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-filter-bar-container-{{ ai_gen_id }} {
+      flex-direction: column;
+      gap: 15px;
+      align-items: stretch;
+    }
+
+    .ai-filter-bar-left-{{ ai_gen_id }} {
+      justify-content: center;
+    }
+
+    .ai-filter-bar-right-{{ ai_gen_id }} {
+      justify-content: center;
+    }
+
+    .ai-filter-dropdown-content-{{ ai_gen_id }} {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 300px;
+    }
+
+    .ai-filter-dropdown-content-{{ ai_gen_id }}.active {
+      transform: translate(-50%, -50%);
+    }
+  }
+{% endstyle %}
+
+<collection-filter-bar-{{ ai_gen_id }}
+  class="ai-filter-bar-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+  data-collection-url="{{ collection.url }}"
+>
+  <div class="ai-filter-bar-container-{{ ai_gen_id }}">
+    <div class="ai-filter-bar-left-{{ ai_gen_id }}">
+      <div class="ai-filter-dropdown-{{ ai_gen_id }}">
+        <button class="ai-filter-button-{{ ai_gen_id }}" data-filter="sort">
+          <span>{{ block.settings.sort_placeholder }}</span>
+          <svg class="ai-filter-arrow-{{ ai_gen_id }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6,9 12,15 18,9"></polyline>
+          </svg>
+        </button>
+        <div class="ai-filter-dropdown-content-{{ ai_gen_id }}" data-dropdown="sort">
+          <div class="ai-filter-option-{{ ai_gen_id }}" data-value="manual">Best selling</div>
+          <div class="ai-filter-option-{{ ai_gen_id }}" data-value="best-selling">Featured</div>
+          <div class="ai-filter-option-{{ ai_gen_id }}" data-value="title-ascending">A-Z</div>
+          <div class="ai-filter-option-{{ ai_gen_id }}" data-value="title-descending">Z-A</div>
+          <div class="ai-filter-option-{{ ai_gen_id }}" data-value="price-ascending">Price: Low to High</div>
+          <div class="ai-filter-option-{{ ai_gen_id }}" data-value="price-descending">Price: High to Low</div>
+          <div class="ai-filter-option-{{ ai_gen_id }}" data-value="created-ascending">Date: Old to New</div>
+          <div class="ai-filter-option-{{ ai_gen_id }}" data-value="created-descending">Date: New to Old</div>
+        </div>
+      </div>
+
+      {% if block.settings.show_size_filter %}
+        {% assign size_filter = collection.filters | where: 'label', 'Size' | first %}
+        {% unless size_filter %}
+          {% assign size_filter = collection.filters | where: 'param_name', 'filter.p.m.custom.size' | first %}
+        {% endunless %}
+        {% if size_filter %}
+          <div class="ai-filter-dropdown-{{ ai_gen_id }}">
+            <button class="ai-filter-button-{{ ai_gen_id }}" data-filter="{{ size_filter.param_name }}">
+              <span>{{ block.settings.size_placeholder }}</span>
+              <svg class="ai-filter-arrow-{{ ai_gen_id }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6,9 12,15 18,9"></polyline>
+              </svg>
+            </button>
+            <div class="ai-filter-dropdown-content-{{ ai_gen_id }}" data-dropdown="{{ size_filter.param_name }}">
+              {% for value in size_filter.values %}
+                <div class="ai-filter-option-{{ ai_gen_id }} {% if value.active %}selected{% endif %}" 
+                     data-value="{{ value.value }}" 
+                     data-param="{{ size_filter.param_name }}">
+                  {{ value.label }} ({{ value.count }})
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+
+      {% if block.settings.show_color_filter %}
+        {% assign color_filter = collection.filters | where: 'label', 'Color' | first %}
+        {% unless color_filter %}
+          {% assign color_filter = collection.filters | where: 'param_name', 'filter.p.m.custom.color' | first %}
+        {% endunless %}
+        {% if color_filter %}
+          <div class="ai-filter-dropdown-{{ ai_gen_id }}">
+            <button class="ai-filter-button-{{ ai_gen_id }}" data-filter="{{ color_filter.param_name }}">
+              <span>{{ block.settings.color_placeholder }}</span>
+              <svg class="ai-filter-arrow-{{ ai_gen_id }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6,9 12,15 18,9"></polyline>
+              </svg>
+            </button>
+            <div class="ai-filter-dropdown-content-{{ ai_gen_id }}" data-dropdown="{{ color_filter.param_name }}">
+              {% for value in color_filter.values %}
+                <div class="ai-filter-option-{{ ai_gen_id }} {% if value.active %}selected{% endif %}" 
+                     data-value="{{ value.value }}" 
+                     data-param="{{ color_filter.param_name }}">
+                  {% assign color_name = value.label | downcase | replace: ' ', '' %}
+                  {% case color_name %}
+                    {% when 'red' %}
+                      <span class="ai-color-swatch-{{ ai_gen_id }}" style="background-color: #ff0000;"></span>
+                    {% when 'blue' %}
+                      <span class="ai-color-swatch-{{ ai_gen_id }}" style="background-color: #0000ff;"></span>
+                    {% when 'green' %}
+                      <span class="ai-color-swatch-{{ ai_gen_id }}" style="background-color: #008000;"></span>
+                    {% when 'black' %}
+                      <span class="ai-color-swatch-{{ ai_gen_id }}" style="background-color: #000000;"></span>
+                    {% when 'white' %}
+                      <span class="ai-color-swatch-{{ ai_gen_id }}" style="background-color: #ffffff;"></span>
+                    {% when 'yellow' %}
+                      <span class="ai-color-swatch-{{ ai_gen_id }}" style="background-color: #ffff00;"></span>
+                    {% when 'pink' %}
+                      <span class="ai-color-swatch-{{ ai_gen_id }}" style="background-color: #ffc0cb;"></span>
+                    {% when 'purple' %}
+                      <span class="ai-color-swatch-{{ ai_gen_id }}" style="background-color: #800080;"></span>
+                    {% when 'orange' %}
+                      <span class="ai-color-swatch-{{ ai_gen_id }}" style="background-color: #ffa500;"></span>
+                    {% when 'brown' %}
+                      <span class="ai-color-swatch-{{ ai_gen_id }}" style="background-color: #a52a2a;"></span>
+                    {% when 'gray', 'grey' %}
+                      <span class="ai-color-swatch-{{ ai_gen_id }}" style="background-color: #808080;"></span>
+                    {% when 'navy' %}
+                      <span class="ai-color-swatch-{{ ai_gen_id }}" style="background-color: #000080;"></span>
+                    {% when 'beige' %}
+                      <span class="ai-color-swatch-{{ ai_gen_id }}" style="background-color: #f5f5dc;"></span>
+                    {% when 'gold' %}
+                      <span class="ai-color-swatch-{{ ai_gen_id }}" style="background-color: #ffd700;"></span>
+                    {% when 'silver' %}
+                      <span class="ai-color-swatch-{{ ai_gen_id }}" style="background-color: #c0c0c0;"></span>
+                    {% else %}
+                      <span class="ai-color-swatch-{{ ai_gen_id }}" style="background-color: #cccccc;"></span>
+                  {% endcase %}
+                  {{ value.label }} ({{ value.count }})
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+
+      {% if collection.filters.size > 0 %}
+        {% for filter in collection.filters %}
+          {% if filter.type == 'list' and filter.label != 'Size' and filter.label != 'Color' %}
+            <div class="ai-filter-dropdown-{{ ai_gen_id }}">
+              <button class="ai-filter-button-{{ ai_gen_id }}" data-filter="{{ filter.param_name }}">
+                <span>{{ filter.label }}</span>
+                <svg class="ai-filter-arrow-{{ ai_gen_id }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6,9 12,15 18,9"></polyline>
+                </svg>
+              </button>
+              <div class="ai-filter-dropdown-content-{{ ai_gen_id }}" data-dropdown="{{ filter.param_name }}">
+                {% for value in filter.values %}
+                  <div class="ai-filter-option-{{ ai_gen_id }} {% if value.active %}selected{% endif %}" 
+                       data-value="{{ value.value }}" 
+                       data-param="{{ filter.param_name }}">
+                    {{ value.label }} ({{ value.count }})
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      {% if block.settings.show_category_filter %}
+        <div class="ai-filter-dropdown-{{ ai_gen_id }}">
+          <button class="ai-filter-button-{{ ai_gen_id }}" data-filter="category">
+            <span>{{ block.settings.category_placeholder }}</span>
+            <svg class="ai-filter-arrow-{{ ai_gen_id }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6,9 12,15 18,9"></polyline>
+            </svg>
+          </button>
+          <div class="ai-filter-dropdown-content-{{ ai_gen_id }}" data-dropdown="category">
+            {% for collection_item in collections %}
+              {% if collection_item.products_count > 0 %}
+                <div class="ai-filter-option-{{ ai_gen_id }}" data-value="{{ collection_item.handle }}">
+                  {{ collection_item.title }} ({{ collection_item.products_count }})
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if block.settings.show_grid_view %}
+      <div class="ai-filter-bar-right-{{ ai_gen_id }}">
+        <span class="ai-grid-view-label-{{ ai_gen_id }}">{{ block.settings.grid_label }}</span>
+        <div class="ai-grid-view-controls-{{ ai_gen_id }}">
+          <button class="ai-grid-view-button-{{ ai_gen_id }}" data-grid="1">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            </svg>
+          </button>
+          <button class="ai-grid-view-button-{{ ai_gen_id }}" data-grid="2">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="18" rx="1" ry="1"/>
+              <rect x="14" y="3" width="7" height="18" rx="1" ry="1"/>
+            </svg>
+          </button>
+          <button class="ai-grid-view-button-{{ ai_gen_id }} active" data-grid="3">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="5" height="18" rx="1" ry="1"/>
+              <rect x="10" y="3" width="4" height="18" rx="1" ry="1"/>
+              <rect x="16" y="3" width="5" height="18" rx="1" ry="1"/>
+            </svg>
+          </button>
+          <button class="ai-grid-view-button-{{ ai_gen_id }}" data-grid="4">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="4" height="18" rx="1" ry="1"/>
+              <rect x="8" y="3" width="3" height="18" rx="1" ry="1"/>
+              <rect x="12" y="3" width="3" height="18" rx="1" ry="1"/>
+              <rect x="16" y="3" width="5" height="18" rx="1" ry="1"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</collection-filter-bar-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class CollectionFilterBar{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.currentFilters = new URLSearchParams(window.location.search);
+        this.collectionUrl = this.dataset.collectionUrl || window.location.pathname;
+      }
+
+      connectedCallback() {
+        this.setupEventListeners();
+        this.initializeFilters();
+        this.initializeGridView();
+      }
+
+      setupEventListeners() {
+        const filterButtons = this.querySelectorAll('.ai-filter-button-{{ ai_gen_id }}');
+        const filterOptions = this.querySelectorAll('.ai-filter-option-{{ ai_gen_id }}');
+        const gridButtons = this.querySelectorAll('.ai-grid-view-button-{{ ai_gen_id }}');
+
+        filterButtons.forEach(button => {
+          button.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.toggleDropdown(button);
+          });
+        });
+
+        filterOptions.forEach(option => {
+          option.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.handleFilterSelection(option);
+          });
+        });
+
+        gridButtons.forEach(button => {
+          button.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.handleGridChange(button);
+          });
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.ai-filter-dropdown-{{ ai_gen_id }}')) {
+            this.closeAllDropdowns();
+          }
+        });
+      }
+
+      toggleDropdown(button) {
+        const dropdown = button.nextElementSibling;
+        const isActive = button.classList.contains('active');
+
+        this.closeAllDropdowns();
+
+        if (!isActive) {
+          button.classList.add('active');
+          dropdown.classList.add('active');
+        }
+      }
+
+      closeAllDropdowns() {
+        const activeButtons = this.querySelectorAll('.ai-filter-button-{{ ai_gen_id }}.active');
+        const activeDropdowns = this.querySelectorAll('.ai-filter-dropdown-content-{{ ai_gen_id }}.active');
+
+        activeButtons.forEach(button => button.classList.remove('active'));
+        activeDropdowns.forEach(dropdown => dropdown.classList.remove('active'));
+      }
+
+      handleFilterSelection(option) {
+        const filterType = option.dataset.param || option.closest('[data-dropdown]').dataset.dropdown;
+        const value = option.dataset.value;
+
+        if (filterType === 'sort') {
+          this.currentFilters.set('sort_by', value);
+        } else if (filterType === 'category') {
+          window.location.href = `/collections/${value}`;
+          return;
+        } else {
+          if (option.classList.contains('selected')) {
+            this.currentFilters.delete(filterType);
+            option.classList.remove('selected');
+          } else {
+            this.currentFilters.set(filterType, value);
+            option.classList.add('selected');
+            
+            const siblings = option.parentElement.querySelectorAll('.ai-filter-option-{{ ai_gen_id }}');
+            siblings.forEach(sibling => {
+              if (sibling !== option) {
+                sibling.classList.remove('selected');
+              }
+            });
+          }
+        }
+
+        this.updateButtonText(option, filterType);
+        this.applyFilters();
+        this.closeAllDropdowns();
+      }
+
+      updateButtonText(option, filterType) {
+        const button = option.closest('.ai-filter-dropdown-{{ ai_gen_id }}').querySelector('.ai-filter-button-{{ ai_gen_id }}');
+        const span = button.querySelector('span');
+        
+        if (option.classList.contains('selected')) {
+          span.textContent = option.textContent.split(' (')[0];
+        } else {
+          const originalText = button.dataset.originalText || span.textContent;
+          span.textContent = originalText;
+        }
+      }
+
+      applyFilters() {
+        const url = new URL(this.collectionUrl, window.location.origin);
+        
+        for (const [key, value] of this.currentFilters.entries()) {
+          url.searchParams.set(key, value);
+        }
+
+        this.fetchFilteredProducts(url.toString());
+      }
+
+      async fetchFilteredProducts(url) {
+        try {
+          const response = await fetch(`${url}?section_id=collection-template`);
+          const html = await response.text();
+          
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          
+          const newProductGrid = doc.querySelector('[data-collection-products]');
+          const currentProductGrid = document.querySelector('[data-collection-products]');
+          
+          if (newProductGrid && currentProductGrid) {
+            currentProductGrid.innerHTML = newProductGrid.innerHTML;
+          }
+
+          window.history.pushState({}, '', url);
+        } catch (error) {
+          console.error('Error fetching filtered products:', error);
+        }
+      }
+
+      initializeFilters() {
+        const filterButtons = this.querySelectorAll('.ai-filter-button-{{ ai_gen_id }}');
+        
+        filterButtons.forEach(button => {
+          const span = button.querySelector('span');
+          button.dataset.originalText = span.textContent;
+        });
+
+        const selectedOptions = this.querySelectorAll('.ai-filter-option-{{ ai_gen_id }}.selected');
+        selectedOptions.forEach(option => {
+          const filterType = option.dataset.param || option.closest('[data-dropdown]').dataset.dropdown;
+          this.updateButtonText(option, filterType);
+        });
+      }
+
+      handleGridChange(button) {
+        const gridValue = button.dataset.grid;
+        const activeButton = this.querySelector('.ai-grid-view-button-{{ ai_gen_id }}.active');
+        
+        if (activeButton) {
+          activeButton.classList.remove('active');
+        }
+        
+        button.classList.add('active');
+        
+        const productGrid = document.querySelector('[data-collection-products]');
+        if (productGrid) {
+          productGrid.style.gridTemplateColumns = `repeat(${gridValue}, 1fr)`;
+          productGrid.dataset.gridColumns = gridValue;
+        }
+
+        localStorage.setItem('collection-grid-view', gridValue);
+      }
+
+      initializeGridView() {
+        const savedGridView = localStorage.getItem('collection-grid-view') || '3';
+        const gridButton = this.querySelector(`[data-grid="${savedGridView}"]`);
+        
+        if (gridButton) {
+          this.handleGridChange(gridButton);
+        }
+      }
+    }
+
+    customElements.define('collection-filter-bar-{{ ai_gen_id }}', CollectionFilterBar{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Collection filter bar",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky",
+      "label": "Enable sticky filter bar",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "sticky_top_spacing",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Sticky top spacing",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "min": 5,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Vertical padding",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom margin",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Filter settings"
+    },
+    {
+      "type": "text",
+      "id": "sort_placeholder",
+      "label": "Sort placeholder text",
+      "default": "Sort & Filter"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_size_filter",
+      "label": "Show size filter",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "size_placeholder",
+      "label": "Size placeholder text",
+      "default": "Size"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_color_filter",
+      "label": "Show color filter",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "color_placeholder",
+      "label": "Color placeholder text",
+      "default": "Color"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_category_filter",
+      "label": "Show category filter",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "category_placeholder",
+      "label": "Category placeholder text",
+      "default": "Category"
+    },
+    {
+      "type": "header",
+      "content": "Grid view settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid_view",
+      "label": "Show grid view controls",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "grid_label",
+      "label": "Grid view label",
+      "default": "View:"
+    },
+    {
+      "type": "header",
+      "content": "Filter bar style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Filter button style"
+    },
+    {
+      "type": "color",
+      "id": "filter_button_bg",
+      "label": "Background color",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "filter_button_text",
+      "label": "Text color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "filter_button_border",
+      "label": "Border color",
+      "default": "#dddddd"
+    },
+    {
+      "type": "color",
+      "id": "filter_button_hover_bg",
+      "label": "Hover background color",
+      "default": "#eeeeee"
+    },
+    {
+      "type": "color",
+      "id": "filter_button_hover_text",
+      "label": "Hover text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "filter_button_active_bg",
+      "label": "Active background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "filter_button_active_text",
+      "label": "Active text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "filter_button_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Button border radius",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Dropdown style"
+    },
+    {
+      "type": "color",
+      "id": "dropdown_bg",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "dropdown_border",
+      "label": "Border color",
+      "default": "#dddddd"
+    },
+    {
+      "type": "color",
+      "id": "dropdown_text",
+      "label": "Text color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "dropdown_hover_bg",
+      "label": "Hover background color",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "dropdown_selected_bg",
+      "label": "Selected background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "dropdown_selected_text",
+      "label": "Selected text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "dropdown_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Dropdown border radius",
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Grid view style"
+    },
+    {
+      "type": "color",
+      "id": "grid_label_color",
+      "label": "Label color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "grid_button_bg",
+      "label": "Button background color",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "grid_button_border",
+      "label": "Button border color",
+      "default": "#dddddd"
+    },
+    {
+      "type": "color",
+      "id": "grid_button_icon",
+      "label": "Button icon color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "grid_button_hover_bg",
+      "label": "Button hover background color",
+      "default": "#eeeeee"
+    },
+    {
+      "type": "color",
+      "id": "grid_button_active_bg",
+      "label": "Active button background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "grid_button_active_border",
+      "label": "Active button border color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "grid_button_active_icon",
+      "label": "Active button icon color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection filter bar"
+    }
+  ]
+}
+{% endschema %}

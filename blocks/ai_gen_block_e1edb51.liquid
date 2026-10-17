@@ -1,0 +1,298 @@
+{% doc %}
+  @prompt
+    i want to Add my custom font link and apply it to all <span> tags across the site with the chosen font weight and size.
+    
+    Font being Rendered also same that i uploaded., i don't want to see this sectio nto the user the font will be render for the full site only., this font directly applied for full site span tag currently it's not applying the font , weight size, apply this.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  @import url('{{ block.settings.font_url }}');
+  
+  span {
+    font-family: '{{ block.settings.font_family }}', sans-serif !important;
+    font-weight: {{ block.settings.font_weight }} !important;
+    font-size: {{ block.settings.font_size }}px !important;
+    line-height: {{ block.settings.line_height }} !important;
+    letter-spacing: {{ block.settings.letter_spacing }} !important;
+    {% if block.settings.font_style != 'normal' %}
+      font-style: {{ block.settings.font_style }} !important;
+    {% endif %}
+    {% if block.settings.text_transform != 'none' %}
+      text-transform: {{ block.settings.text_transform }} !important;
+    {% endif %}
+    {% if block.settings.text_color != blank %}
+      color: {{ block.settings.text_color }} !important;
+    {% endif %}
+  }
+
+  .ai-custom-font-applier-{{ ai_gen_id }} {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+{% endstyle %}
+
+<custom-font-applier-{{ ai_gen_id }}
+  class="ai-custom-font-applier-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+</custom-font-applier-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class CustomFontApplier{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.fontSettings = {
+          fontFamily: '{{ block.settings.font_family }}',
+          fontWeight: '{{ block.settings.font_weight }}',
+          fontSize: '{{ block.settings.font_size }}px',
+          lineHeight: '{{ block.settings.line_height }}',
+          letterSpacing: '{{ block.settings.letter_spacing }}',
+          fontStyle: '{{ block.settings.font_style }}',
+          textTransform: '{{ block.settings.text_transform }}',
+          textColor: '{{ block.settings.text_color }}'
+        };
+      }
+
+      connectedCallback() {
+        this.loadFont();
+        this.applyFontToAllSpans();
+        this.observeNewSpans();
+      }
+
+      loadFont() {
+        if ('{{ block.settings.font_url }}') {
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = '{{ block.settings.font_url }}';
+          document.head.appendChild(link);
+        }
+      }
+
+      applyFontToAllSpans() {
+        const spans = document.querySelectorAll('span');
+        spans.forEach(span => {
+          this.applyCustomFont(span);
+        });
+      }
+
+      applyCustomFont(span) {
+        if (this.fontSettings.fontFamily) {
+          span.style.setProperty('font-family', `'${this.fontSettings.fontFamily}', sans-serif`, 'important');
+        }
+        
+        span.style.setProperty('font-weight', this.fontSettings.fontWeight, 'important');
+        span.style.setProperty('font-size', this.fontSettings.fontSize, 'important');
+        span.style.setProperty('line-height', this.fontSettings.lineHeight, 'important');
+        span.style.setProperty('letter-spacing', this.fontSettings.letterSpacing, 'important');
+        
+        if (this.fontSettings.fontStyle !== 'normal') {
+          span.style.setProperty('font-style', this.fontSettings.fontStyle, 'important');
+        }
+        
+        if (this.fontSettings.textTransform !== 'none') {
+          span.style.setProperty('text-transform', this.fontSettings.textTransform, 'important');
+        }
+        
+        if (this.fontSettings.textColor) {
+          span.style.setProperty('color', this.fontSettings.textColor, 'important');
+        }
+      }
+
+      observeNewSpans() {
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                if (node.tagName === 'SPAN') {
+                  this.applyCustomFont(node);
+                }
+                const spans = node.querySelectorAll && node.querySelectorAll('span');
+                if (spans) {
+                  spans.forEach(span => this.applyCustomFont(span));
+                }
+              }
+            });
+          });
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      }
+    }
+
+    if (!customElements.get('custom-font-applier-{{ ai_gen_id }}')) {
+      customElements.define('custom-font-applier-{{ ai_gen_id }}', CustomFontApplier{{ ai_gen_id }});
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const applier = document.querySelector('custom-font-applier-{{ ai_gen_id }}');
+      if (applier && applier.applyFontToAllSpans) {
+        setTimeout(() => {
+          applier.applyFontToAllSpans();
+        }, 100);
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Custom font applier",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Font settings"
+    },
+    {
+      "type": "text",
+      "id": "font_url",
+      "label": "Font URL",
+      "info": "Enter the Google Fonts or custom font URL (e.g., https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap)"
+    },
+    {
+      "type": "text",
+      "id": "font_family",
+      "label": "Font family name",
+      "default": "Roboto",
+      "info": "Enter the exact font family name as it appears in the font URL"
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "100",
+          "label": "Thin (100)"
+        },
+        {
+          "value": "200",
+          "label": "Extra Light (200)"
+        },
+        {
+          "value": "300",
+          "label": "Light (300)"
+        },
+        {
+          "value": "400",
+          "label": "Normal (400)"
+        },
+        {
+          "value": "500",
+          "label": "Medium (500)"
+        },
+        {
+          "value": "600",
+          "label": "Semi Bold (600)"
+        },
+        {
+          "value": "700",
+          "label": "Bold (700)"
+        },
+        {
+          "value": "800",
+          "label": "Extra Bold (800)"
+        },
+        {
+          "value": "900",
+          "label": "Black (900)"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 8,
+      "max": 72,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 16
+    },
+    {
+      "type": "text",
+      "id": "line_height",
+      "label": "Line height",
+      "default": "1.4",
+      "info": "Enter a number (e.g., 1.4) or value with unit (e.g., 24px)"
+    },
+    {
+      "type": "text",
+      "id": "letter_spacing",
+      "label": "Letter spacing",
+      "default": "normal",
+      "info": "Enter a value like 'normal', '0.1em', or '1px'"
+    },
+    {
+      "type": "select",
+      "id": "font_style",
+      "label": "Font style",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "italic",
+          "label": "Italic"
+        },
+        {
+          "value": "oblique",
+          "label": "Oblique"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "select",
+      "id": "text_transform",
+      "label": "Text transform",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "uppercase",
+          "label": "Uppercase"
+        },
+        {
+          "value": "lowercase",
+          "label": "Lowercase"
+        },
+        {
+          "value": "capitalize",
+          "label": "Capitalize"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "info": "Leave empty to keep original colors"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom font applier"
+    }
+  ]
+}
+{% endschema %}

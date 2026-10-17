@@ -1,0 +1,712 @@
+{% doc %}
+  @prompt
+    i want  the the filter bar horizontal for this collection page in one line into the left side of horizontal line all th filte options like the sort & filter , size all the remaning & the right side i will select the grid view like the 1 2 3 4, i want  the the filter bar horizontal for this collection page in one line into the left side of horizontal line all th filte options like the sort & filter , size all the remaning & the right side i will select the grid view like the 1 2 3 4 into the icon.
+    
+    i dont want the lables add the placeholder clear to everybody., when i click onto the any filter the below product automatically filter accordingly to it also give me option to on of the grid view option>
+    
+    check once the filter & sort works accordingly, i also want the option to hide the grid view 1 2 3 4, i also want the option of the category Selection 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-collection-filter-bar-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: {{ block.settings.padding_vertical }}px {{ block.settings.padding_horizontal }}px;
+    background-color: {{ block.settings.background_color }};
+    border: 1px solid {{ block.settings.border_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+    margin-bottom: {{ block.settings.margin_bottom }}px;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .ai-filter-controls-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.filter_gap }}px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ai-grid-controls-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  {% unless block.settings.show_grid_controls %}
+    .ai-grid-controls-{{ ai_gen_id }} {
+      display: none;
+    }
+  {% endunless %}
+
+  .ai-filter-select-{{ ai_gen_id }} {
+    padding: 8px 12px;
+    border: 1px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    background-color: {{ block.settings.input_background_color }};
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.font_size }}px;
+    min-width: 120px;
+    cursor: pointer;
+  }
+
+  .ai-filter-select-{{ ai_gen_id }}:focus {
+    outline: 2px solid {{ block.settings.focus_color }};
+    outline-offset: 2px;
+  }
+
+  .ai-grid-button-{{ ai_gen_id }} {
+    width: 40px;
+    height: 40px;
+    border: 1px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.input_border_radius }}px;
+    background-color: {{ block.settings.input_background_color }};
+    color: {{ block.settings.text_color }};
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .ai-grid-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.button_hover_color }};
+    border-color: {{ block.settings.button_hover_color }};
+    color: {{ block.settings.button_hover_text_color }};
+  }
+
+  .ai-grid-button-{{ ai_gen_id }}.active {
+    background-color: {{ block.settings.button_active_color }};
+    border-color: {{ block.settings.button_active_color }};
+    color: {{ block.settings.button_active_text_color }};
+  }
+
+  .ai-grid-button-{{ ai_gen_id }}:focus {
+    outline: 2px solid {{ block.settings.focus_color }};
+    outline-offset: 2px;
+  }
+
+  .ai-grid-icon-{{ ai_gen_id }} {
+    width: 20px;
+    height: 20px;
+  }
+
+  .ai-collection-products-{{ ai_gen_id }} {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(var(--grid-columns, 2), 1fr);
+  }
+
+  .ai-collection-products-{{ ai_gen_id }}.grid-1 {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-collection-products-{{ ai_gen_id }}.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ai-collection-products-{{ ai_gen_id }}.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .ai-collection-products-{{ ai_gen_id }}.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media screen and (max-width: 1024px) {
+    .ai-collection-products-{{ ai_gen_id }}.grid-4 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-collection-filter-bar-{{ ai_gen_id }} {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 15px;
+    }
+
+    .ai-filter-controls-{{ ai_gen_id }} {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .ai-filter-select-{{ ai_gen_id }} {
+      width: 100%;
+    }
+
+    .ai-grid-controls-{{ ai_gen_id }} {
+      justify-content: center;
+    }
+
+    .ai-collection-products-{{ ai_gen_id }}.grid-3,
+    .ai-collection-products-{{ ai_gen_id }}.grid-4 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .ai-filter-controls-{{ ai_gen_id }} {
+      gap: 8px;
+    }
+
+    .ai-grid-controls-{{ ai_gen_id }} {
+      gap: 6px;
+    }
+
+    .ai-grid-button-{{ ai_gen_id }} {
+      width: 36px;
+      height: 36px;
+    }
+
+    .ai-grid-icon-{{ ai_gen_id }} {
+      width: 18px;
+      height: 18px;
+    }
+
+    .ai-collection-products-{{ ai_gen_id }}.grid-2,
+    .ai-collection-products-{{ ai_gen_id }}.grid-3,
+    .ai-collection-products-{{ ai_gen_id }}.grid-4 {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstyle %}
+
+<collection-filter-bar-{{ ai_gen_id }}
+  class="ai-collection-filter-bar-{{ ai_gen_id }}"
+  data-collection-url="{{ collection.url | default: '/collections/all' }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-filter-controls-{{ ai_gen_id }}">
+    {% if block.settings.show_category_filter %}
+      <select class="ai-filter-select-{{ ai_gen_id }}" data-filter-type="collection">
+        <option value="">Category</option>
+        {% for collection_item in collections %}
+          {% unless collection_item.handle == 'frontpage' %}
+            <option value="{{ collection_item.handle }}" {% if collection.handle == collection_item.handle %}selected{% endif %}>
+              {{ collection_item.title }}
+            </option>
+          {% endunless %}
+        {% endfor %}
+      </select>
+    {% endif %}
+
+    <select class="ai-filter-select-{{ ai_gen_id }}" data-filter-type="sort_by">
+      <option value="">Sort by</option>
+      <option value="manual" {% if collection.sort_by == 'manual' %}selected{% endif %}>Featured</option>
+      <option value="best-selling" {% if collection.sort_by == 'best-selling' %}selected{% endif %}>Best selling</option>
+      <option value="title-ascending" {% if collection.sort_by == 'title-ascending' %}selected{% endif %}>A-Z</option>
+      <option value="title-descending" {% if collection.sort_by == 'title-descending' %}selected{% endif %}>Z-A</option>
+      <option value="price-ascending" {% if collection.sort_by == 'price-ascending' %}selected{% endif %}>Price: Low to High</option>
+      <option value="price-descending" {% if collection.sort_by == 'price-descending' %}selected{% endif %}>Price: High to Low</option>
+      <option value="created-ascending" {% if collection.sort_by == 'created-ascending' %}selected{% endif %}>Date: Old to New</option>
+      <option value="created-descending" {% if collection.sort_by == 'created-descending' %}selected{% endif %}>Date: New to Old</option>
+    </select>
+
+    {% if block.settings.show_availability_filter %}
+      <select class="ai-filter-select-{{ ai_gen_id }}" data-filter-type="filter.v.availability">
+        <option value="">Availability</option>
+        <option value="1" {% if collection.filters contains collections.filters.availability and collection.filters.availability.active_values contains '1' %}selected{% endif %}>In stock</option>
+        <option value="0" {% if collection.filters contains collections.filters.availability and collection.filters.availability.active_values contains '0' %}selected{% endif %}>Out of stock</option>
+      </select>
+    {% endif %}
+
+    {% if block.settings.show_price_filter %}
+      <select class="ai-filter-select-{{ ai_gen_id }}" data-filter-type="filter.v.price.gte">
+        <option value="">Price range</option>
+        <option value="0" data-price-max="2500">Under ₹25</option>
+        <option value="2500" data-price-max="5000">₹25 - ₹50</option>
+        <option value="5000" data-price-max="10000">₹50 - ₹100</option>
+        <option value="10000" data-price-max="20000">₹100 - ₹200</option>
+        <option value="20000" data-price-max="50000">₹200 - ₹500</option>
+        <option value="50000">Over ₹500</option>
+      </select>
+    {% endif %}
+
+    {% if block.settings.show_size_filter %}
+      <select class="ai-filter-select-{{ ai_gen_id }}" data-filter-type="filter.v.option.size">
+        <option value="">Size</option>
+        <option value="XS">XS</option>
+        <option value="S">S</option>
+        <option value="M">M</option>
+        <option value="L">L</option>
+        <option value="XL">XL</option>
+        <option value="XXL">XXL</option>
+      </select>
+    {% endif %}
+
+    {% if block.settings.show_color_filter %}
+      <select class="ai-filter-select-{{ ai_gen_id }}" data-filter-type="filter.v.option.color">
+        <option value="">Color</option>
+        <option value="Black">Black</option>
+        <option value="White">White</option>
+        <option value="Red">Red</option>
+        <option value="Blue">Blue</option>
+        <option value="Green">Green</option>
+        <option value="Yellow">Yellow</option>
+        <option value="Pink">Pink</option>
+        <option value="Purple">Purple</option>
+      </select>
+    {% endif %}
+
+    {% if block.settings.show_brand_filter %}
+      <select class="ai-filter-select-{{ ai_gen_id }}" data-filter-type="filter.v.vendor">
+        <option value="">Brand</option>
+        {% for vendor in collection.all_vendors %}
+          <option value="{{ vendor | escape }}">{{ vendor }}</option>
+        {% endfor %}
+      </select>
+    {% endif %}
+
+    {% if block.settings.show_product_type_filter %}
+      <select class="ai-filter-select-{{ ai_gen_id }}" data-filter-type="filter.v.product_type">
+        <option value="">Product type</option>
+        {% for product_type in collection.all_types %}
+          <option value="{{ product_type | escape }}">{{ product_type }}</option>
+        {% endfor %}
+      </select>
+    {% endif %}
+  </div>
+
+  {% if block.settings.show_grid_controls %}
+    <div class="ai-grid-controls-{{ ai_gen_id }}">
+      <button
+        class="ai-grid-button-{{ ai_gen_id }}"
+        data-grid-columns="1"
+        aria-label="1 column grid view"
+      >
+        <svg class="ai-grid-icon-{{ ai_gen_id }}" viewBox="0 0 24 24" fill="currentColor">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+        </svg>
+      </button>
+
+      <button
+        class="ai-grid-button-{{ ai_gen_id }} active"
+        data-grid-columns="2"
+        aria-label="2 column grid view"
+      >
+        <svg class="ai-grid-icon-{{ ai_gen_id }}" viewBox="0 0 24 24" fill="currentColor">
+          <rect x="3" y="3" width="7" height="18" rx="1" ry="1"/>
+          <rect x="14" y="3" width="7" height="18" rx="1" ry="1"/>
+        </svg>
+      </button>
+
+      <button
+        class="ai-grid-button-{{ ai_gen_id }}"
+        data-grid-columns="3"
+        aria-label="3 column grid view"
+      >
+        <svg class="ai-grid-icon-{{ ai_gen_id }}" viewBox="0 0 24 24" fill="currentColor">
+          <rect x="3" y="3" width="4" height="18" rx="1" ry="1"/>
+          <rect x="10" y="3" width="4" height="18" rx="1" ry="1"/>
+          <rect x="17" y="3" width="4" height="18" rx="1" ry="1"/>
+        </svg>
+      </button>
+
+      <button
+        class="ai-grid-button-{{ ai_gen_id }}"
+        data-grid-columns="4"
+        aria-label="4 column grid view"
+      >
+        <svg class="ai-grid-icon-{{ ai_gen_id }}" viewBox="0 0 24 24" fill="currentColor">
+          <rect x="3" y="3" width="3" height="18" rx="1" ry="1"/>
+          <rect x="8" y="3" width="3" height="18" rx="1" ry="1"/>
+          <rect x="13" y="3" width="3" height="18" rx="1" ry="1"/>
+          <rect x="18" y="3" width="3" height="18" rx="1" ry="1"/>
+        </svg>
+      </button>
+    </div>
+  {% endif %}
+</collection-filter-bar-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class CollectionFilterBar{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.collectionUrl = this.dataset.collectionUrl || '/collections/all';
+      }
+
+      connectedCallback() {
+        this.filterSelects = this.querySelectorAll('.ai-filter-select-{{ ai_gen_id }}');
+        this.gridButtons = this.querySelectorAll('.ai-grid-button-{{ ai_gen_id }}');
+        this.setupEventListeners();
+        this.loadSavedGridSettings();
+        this.initializeCurrentFilters();
+      }
+
+      setupEventListeners() {
+        this.filterSelects.forEach(select => {
+          select.addEventListener('change', (e) => {
+            this.handleFilterChange(e.target);
+          });
+        });
+
+        this.gridButtons.forEach(button => {
+          button.addEventListener('click', (e) => {
+            this.handleGridChange(e.target.closest('.ai-grid-button-{{ ai_gen_id }}'));
+          });
+        });
+      }
+
+      initializeCurrentFilters() {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        this.filterSelects.forEach(select => {
+          const filterType = select.dataset.filterType;
+          const currentValue = urlParams.get(filterType);
+          
+          if (currentValue && select.querySelector(`option[value="${currentValue}"]`)) {
+            select.value = currentValue;
+          }
+        });
+      }
+
+      handleFilterChange(select) {
+        const filterType = select.dataset.filterType;
+        const value = select.value;
+        
+        this.applyFilter(filterType, value, select);
+      }
+
+      applyFilter(filterType, value, selectElement) {
+        if (filterType === 'collection') {
+          if (value) {
+            window.location.href = `/collections/${value}`;
+          } else {
+            window.location.href = '/collections/all';
+          }
+          return;
+        }
+
+        const currentUrl = new URL(window.location);
+        
+        if (value) {
+          if (filterType === 'filter.v.price.gte') {
+            const option = selectElement.querySelector(`option[value="${value}"]`);
+            const maxPrice = option ? option.dataset.priceMax : null;
+            
+            currentUrl.searchParams.set('filter.v.price.gte', value);
+            if (maxPrice) {
+              currentUrl.searchParams.set('filter.v.price.lte', maxPrice);
+            } else {
+              currentUrl.searchParams.delete('filter.v.price.lte');
+            }
+          } else {
+            currentUrl.searchParams.set(filterType, value);
+          }
+        } else {
+          currentUrl.searchParams.delete(filterType);
+          if (filterType === 'filter.v.price.gte') {
+            currentUrl.searchParams.delete('filter.v.price.lte');
+          }
+        }
+
+        currentUrl.searchParams.delete('page');
+        
+        this.showLoadingState();
+        window.location.href = currentUrl.toString();
+      }
+
+      handleGridChange(button) {
+        const columns = button.dataset.gridColumns;
+        
+        this.gridButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        this.saveGridSetting(columns);
+        this.applyGridLayout(columns);
+      }
+
+      applyGridLayout(columns) {
+        const productGrids = document.querySelectorAll(
+          '.collection-products, .product-grid, [data-product-grid], .grid--uniform, .collection__products'
+        );
+        
+        productGrids.forEach(grid => {
+          grid.classList.remove('grid-1', 'grid-2', 'grid-3', 'grid-4');
+          grid.classList.add(`grid-${columns}`);
+          grid.style.setProperty('--grid-columns', columns);
+        });
+
+        document.documentElement.style.setProperty('--collection-grid-columns', columns);
+        
+        const event = new CustomEvent('gridLayoutChanged', {
+          detail: { columns: columns }
+        });
+        document.dispatchEvent(event);
+      }
+
+      saveGridSetting(columns) {
+        try {
+          localStorage.setItem('collection-grid-columns', columns);
+        } catch (e) {
+          console.warn('Could not save grid setting');
+        }
+      }
+
+      loadSavedGridSettings() {
+        try {
+          const savedColumns = localStorage.getItem('collection-grid-columns') || '2';
+          const targetButton = this.querySelector(`[data-grid-columns="${savedColumns}"]`);
+          
+          if (targetButton) {
+            this.gridButtons.forEach(btn => btn.classList.remove('active'));
+            targetButton.classList.add('active');
+            this.applyGridLayout(savedColumns);
+          }
+        } catch (e) {
+          console.warn('Could not load saved grid settings');
+        }
+      }
+
+      showLoadingState() {
+        this.filterSelects.forEach(select => {
+          select.disabled = true;
+        });
+        
+        const loadingIndicator = document.createElement('div');
+        loadingIndicator.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: rgba(0,0,0,0.8);
+          color: white;
+          padding: 20px;
+          border-radius: 8px;
+          z-index: 9999;
+        `;
+        loadingIndicator.textContent = 'Filtering products...';
+        loadingIndicator.id = 'filter-loading-{{ ai_gen_id }}';
+        
+        document.body.appendChild(loadingIndicator);
+      }
+    }
+
+    customElements.define('collection-filter-bar-{{ ai_gen_id }}', CollectionFilterBar{{ ai_gen_id }});
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const loadingIndicator = document.getElementById('filter-loading-{{ ai_gen_id }}');
+      if (loadingIndicator) {
+        loadingIndicator.remove();
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Collection filter bar",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Filter options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_category_filter",
+      "label": "Show category filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_availability_filter",
+      "label": "Show availability filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price_filter",
+      "label": "Show price filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_size_filter",
+      "label": "Show size filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_color_filter",
+      "label": "Show color filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_brand_filter",
+      "label": "Show brand filter",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_type_filter",
+      "label": "Show product type filter",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Grid view options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid_controls",
+      "label": "Show grid view controls",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "filter_gap",
+      "min": 8,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Filter spacing",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Vertical padding",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Bottom margin",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "input_border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Input border radius",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "input_background_color",
+      "label": "Input background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Input border",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover background",
+      "default": "#f0f0f0"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Button hover text",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "button_active_color",
+      "label": "Button active background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "button_active_text_color",
+      "label": "Button active text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "focus_color",
+      "label": "Focus outline",
+      "default": "#0066cc"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 14
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection filter bar"
+    }
+  ]
+}
+{% endschema %}

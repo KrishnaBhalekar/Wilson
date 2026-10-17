@@ -1,0 +1,147 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "gp_section_585804337406542621": {
+      "settings": {
+        "checksum": "df2b398422bcad56acd96f49b4dcbd33faa5b57ac62e7918c34b114559a8a335_1_1_1_0__1",
+        "gg8MGr8DKVw_text": "<p>From honeyed afternoons to crisp mornings, fall in love with hues inspired by autumn’s ephemeral decadence and styles to match fall’s fresh-start furor.</p>",
+        "ggJs00tBBOH_text": "Ace Autumn",
+        "ggdD8yltwdt_label": "<p>SHOP MEN'S NEW ARRIVAL</p>",
+        "ggg9nvReXXc_label": "<p>SHOP WOMEN'S NEW ARRIVAL</p>",
+        "section_preload": "true"
+      },
+      "type": "gp-section-585804337406542621"
+    },
+    "gp_section_585816648745747229": {
+      "settings": {
+        "checksum": "32ea6312cea2d37985df596062a51264d945ae186cc2448449132bf94dfc0248_1_1_1_0__1",
+        "gg1aWBw_H9d_text": "Shop by Category",
+        "section_preload": "false"
+      },
+      "type": "gp-section-585816648745747229"
+    },
+    "gp_section_585818038788424539": {
+      "settings": {
+        "checksum": "1023f6b972108c890bd732ecdc288dbc717a4b1c104c9e30b15908f9cc403ce0_1_1_1_0__1",
+        "gg-YL0HnhJK_text": "Men's Bottoms",
+        "ggKuAAo76cD_text": "Men's Tops",
+        "ggPW_ZnpiSN_text": "Women's Bottoms",
+        "ggcLODTJWlP_text": "Women's Tops",
+        "section_preload": "false"
+      },
+      "type": "gp-section-585818038788424539"
+    },
+    "gp_section_585821266422792899": {
+      "settings": {
+        "checksum": "ba00a96884ae8f465aef2f22e8d25ef0a574af04dc83b99906ad75e75e2c3930_1_1_1_0__1",
+        "ggIh3Ql79fV_label": "<p>SHOP NOW</p>",
+        "ggdxh6OLXcV_text": "Classic Luxury<br>Meets Modern Elegance",
+        "ggji6x5MA1H_text": "<p><span style=\"background-color:rgb(255,255,255);color:rgb(21,25,29);font-size:18px;\">Introducing the Laver Cup 2025 Collection.</span></p>",
+        "section_preload": "false"
+      },
+      "type": "gp-section-585821266422792899"
+    },
+    "gp_section_585824563145736899": {
+      "settings": {
+        "checksum": "6162e0a10af41e3ec9a4ce02f77672e4ecb3ab01af0bf078ab45efc15beba5dd_1_1_1_0__1",
+        "gg8T-oMhiHo_text": "<p>Fall in love again and again with your favorite tennis dresses in new autumn-gilded hues.</p>",
+        "ggWZGeyL-1X_text": "Dres Shop: Fall Edit",
+        "ggdR7rnxqDX_label": "<p>EXPLORE THE DRESS SHOP</p>",
+        "section_preload": "false"
+      },
+      "type": "gp-section-585824563145736899"
+    },
+    "gp_section_585828310135603907": {
+      "settings": {
+        "checksum": "923ae20c23f2ef6c2d3041bda18ea43dc7d9ac7f37cabe81bb4fba2bf953df1d_1_1_1_0__1",
+        "ggCYsnL4WKN_text": "Court-Born.<br>Street Tuned.",
+        "ggiR_Gmrc6N_text": "<p>From court to street, the Pro Staff 87 Mid blends heritage design with updated comfort. A true tennis classic—refined for today, ready for everywhere.</p>",
+        "ggjZb0NZktE_label": "<p>Shop Pro Staff Mid Shoes</p>",
+        "section_preload": "false"
+      },
+      "type": "gp-section-585828310135603907"
+    },
+    "gp_section_585831126409413323": {
+      "settings": {
+        "checksum": "2a6430d75f4599fae16a299c7de439c13fbb86243878217471cb479d89567a6d_1_1_1_0__1",
+        "ggoQBmLD2Ft_text": "Shop By Sport",
+        "section_preload": "false"
+      },
+      "type": "gp-section-585831126409413323"
+    },
+    "gp_section_585831382748496587": {
+      "settings": {
+        "checksum": "f4dc0be1d7dd74d0ae19662573382d72abeafcd5760e406bb07876fe28021a23_1_1_1_0__1",
+        "gg-JEeUnA8d_text": "<p><a href=\"https://www.wilson.com/en-us/basketball\">Basketball</a></p>",
+        "gg-MDEESlH1_text": "<p><a href=\"https://www.wilson.com/en-us/fastpitch\">FASTPITCH</a></p>",
+        "gg1t7Z210eI_text": "<p><a href=\"https://www.wilson.com/en-us/volleyball\">VOLLEYBALL</a></p>",
+        "gg2K0xNibJ1_text": "<p>golf</p>",
+        "gg3WXHcMaMk_text": "<p><a href=\"https://www.wilson.com/en-us/tennis\">TENNIS</a></p>",
+        "ggI997A3UZh_text": "<p><a href=\"https://www.wilson.com/en-us/pickleball\">PICKLEBALL</a></p>",
+        "ggQyVXzT5fb_text": "<p><a href=\"https://www.wilson.com/en-us/baseball\">BASEBALL</a></p>",
+        "ggY5MVQiqoF_text": "<p>Rugby</p>",
+        "section_preload": "false"
+      },
+      "type": "gp-section-585831382748496587"
+    },
+    "gp_section_585837899757388483": {
+      "settings": {
+        "checksum": "1958597326c2ec6551b3fae9b59fbebd2bb79d9e92f1d9f53fd9c7ad3a2bb331_1_1_1_0__1",
+        "ggx8VwtpM03_text": "Shop By Sport",
+        "section_preload": "false"
+      },
+      "type": "gp-section-585837899757388483"
+    },
+    "gp_section_586705103499559602": {
+      "settings": {
+        "checksum": "4237d2e1ba3578baeaf9a482b62d31286394fb02916b0336c3d18b24bd246627_1_1_1_0__1",
+        "gg2xGQ43chE_text": "<p>From honeyed afternoons to crisp mornings, fall in love with hues inspired by autumn’s ephemeral decadence and styles to match fall’s fresh-start furor.</p>",
+        "ggI0RtwJ7Av_label": "<p>SHOP WOMEN'S NEW ARRIVAL</p>",
+        "ggX1stRX5i7_label": "<p>SHOP MEN'S NEW ARRIVAL</p>",
+        "ggk9ZHhymr5_text": "Ace Autumn"
+      },
+      "type": "gp-section-586705103499559602"
+    },
+    "gp_section_586706161554686598": {
+      "settings": {
+        "checksum": "f23bb90ffe289580ea809fd664b54a6bfeee5e3d46a73a53c72f58b5d9e23ad2_1_1_1_0__1",
+        "gg-GV6S9qVc_text": "Men's Bottoms",
+        "ggFJRIX9Jj1_text": "Men's Bottoms",
+        "ggFYyRRIcw6_text": "Men's Bottoms",
+        "ggbIvQwayPs_text": "Men's Bottoms"
+      },
+      "type": "gp-section-586706161554686598"
+    },
+    "gp_section_586978582690005561": {
+      "settings": {
+        "checksum": "3c9bac451333c4a7de1d2aa1d241f55ce4f979a72f9b359429f484f2487fd327_1_1_1_0__1",
+        "gg8ZOX4PA4f_label": "<p>SHOP NOW</p>",
+        "gghHPZzNB77_text": "<p><span style=\"background-color:rgb(255,255,255);color:rgb(21,25,29);font-size:18px;\">Introducing the Laver Cup 2025 Collection.</span></p>",
+        "ggzFKUB4tK2_text": "Classic Luxury<br>Meets Modern Elegance"
+      },
+      "type": "gp-section-586978582690005561"
+    }
+  },
+  "order": [
+    "gp_section_585804337406542621",
+    "gp_section_586705103499559602",
+    "gp_section_585816648745747229",
+    "gp_section_585818038788424539",
+    "gp_section_586706161554686598",
+    "gp_section_586978582690005561",
+    "gp_section_585821266422792899",
+    "gp_section_585824563145736899",
+    "gp_section_585828310135603907",
+    "gp_section_585831126409413323",
+    "gp_section_585831382748496587",
+    "gp_section_585837899757388483"
+  ]
+}

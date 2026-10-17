@@ -1,0 +1,1270 @@
+{% doc %}
+  @prompt
+    generate the sort & filter bar horizontally also it will sticky at the top, generate the sort & filter bar horizontally also it will sticky at the top, i think it's not work properly can you check once also i want this block sticky at the top below header
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-sort-filter-bar-{{ ai_gen_id }} {
+    position: sticky;
+    top: 0;
+    z-index: {{ block.settings.z_index }};
+    background-color: {{ block.settings.background_color }};
+    border-bottom: {{ block.settings.border_width }}px solid {{ block.settings.border_color }};
+    padding: {{ block.settings.padding_vertical }}px {{ block.settings.padding_horizontal }}px;
+    box-shadow: {{ block.settings.shadow_horizontal }}px {{ block.settings.shadow_vertical }}px {{ block.settings.shadow_blur }}px rgba(0, 0, 0, {{ block.settings.shadow_opacity }});
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+
+  .ai-sort-filter-bar__container-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .ai-sort-filter-bar__left-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ai-sort-filter-bar__right-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .ai-sort-filter-bar__title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_font_size }}px;
+    font-weight: {{ block.settings.title_font_weight }};
+    color: {{ block.settings.title_color }};
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .ai-sort-filter-bar__results-count-{{ ai_gen_id }} {
+    font-size: {{ block.settings.results_font_size }}px;
+    color: {{ block.settings.results_color }};
+    white-space: nowrap;
+  }
+
+  .ai-sort-filter-bar__filter-group-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .ai-sort-filter-bar__filter-button-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background-color: {{ block.settings.filter_button_bg }};
+    color: {{ block.settings.filter_button_text }};
+    border: {{ block.settings.filter_button_border_width }}px solid {{ block.settings.filter_button_border }};
+    border-radius: {{ block.settings.filter_button_radius }}px;
+    font-size: {{ block.settings.filter_button_font_size }}px;
+    font-weight: {{ block.settings.filter_button_font_weight }};
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .ai-sort-filter-bar__filter-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.filter_button_bg_hover }};
+    color: {{ block.settings.filter_button_text_hover }};
+    border-color: {{ block.settings.filter_button_border_hover }};
+  }
+
+  .ai-sort-filter-bar__filter-button-{{ ai_gen_id }}.active {
+    background-color: {{ block.settings.filter_button_bg_active }};
+    color: {{ block.settings.filter_button_text_active }};
+    border-color: {{ block.settings.filter_button_border_active }};
+  }
+
+  .ai-sort-filter-bar__sort-select-{{ ai_gen_id }} {
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background-color: {{ block.settings.sort_select_bg }};
+    color: {{ block.settings.sort_select_text }};
+    border: {{ block.settings.sort_select_border_width }}px solid {{ block.settings.sort_select_border }};
+    border-radius: {{ block.settings.sort_select_radius }}px;
+    font-size: {{ block.settings.sort_select_font_size }}px;
+    cursor: pointer;
+    min-width: 150px;
+  }
+
+  .ai-sort-filter-bar__sort-select-{{ ai_gen_id }}:focus {
+    outline: 2px solid {{ block.settings.sort_select_border }};
+    outline-offset: 2px;
+  }
+
+  .ai-sort-filter-bar__view-toggle-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background-color: {{ block.settings.view_toggle_bg }};
+    border: {{ block.settings.view_toggle_border_width }}px solid {{ block.settings.view_toggle_border }};
+    border-radius: {{ block.settings.view_toggle_radius }}px;
+    padding: 2px;
+  }
+
+  .ai-sort-filter-bar__view-button-{{ ai_gen_id }} {
+    padding: {{ block.settings.view_button_padding }}px;
+    background-color: transparent;
+    color: {{ block.settings.view_button_text }};
+    border: none;
+    border-radius: {{ block.settings.view_button_radius }}px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-sort-filter-bar__view-button-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.view_button_bg_hover }};
+    color: {{ block.settings.view_button_text_hover }};
+  }
+
+  .ai-sort-filter-bar__view-button-{{ ai_gen_id }}.active {
+    background-color: {{ block.settings.view_button_bg_active }};
+    color: {{ block.settings.view_button_text_active }};
+  }
+
+  .ai-sort-filter-bar__clear-filters-{{ ai_gen_id }} {
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background-color: transparent;
+    color: {{ block.settings.clear_button_text }};
+    border: {{ block.settings.clear_button_border_width }}px solid {{ block.settings.clear_button_border }};
+    border-radius: {{ block.settings.clear_button_radius }}px;
+    font-size: {{ block.settings.clear_button_font_size }}px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .ai-sort-filter-bar__clear-filters-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.clear_button_bg_hover }};
+    color: {{ block.settings.clear_button_text_hover }};
+    border-color: {{ block.settings.clear_button_border_hover }};
+  }
+
+  .ai-sort-filter-bar__mobile-toggle-{{ ai_gen_id }} {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: {{ block.settings.button_padding_vertical }}px {{ block.settings.button_padding_horizontal }}px;
+    background-color: {{ block.settings.mobile_toggle_bg }};
+    color: {{ block.settings.mobile_toggle_text }};
+    border: {{ block.settings.mobile_toggle_border_width }}px solid {{ block.settings.mobile_toggle_border }};
+    border-radius: {{ block.settings.mobile_toggle_radius }}px;
+    font-size: {{ block.settings.mobile_toggle_font_size }}px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .ai-sort-filter-bar__mobile-toggle-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.mobile_toggle_bg_hover }};
+    color: {{ block.settings.mobile_toggle_text_hover }};
+    border-color: {{ block.settings.mobile_toggle_border_hover }};
+  }
+
+  .ai-sort-filter-bar__mobile-filters-{{ ai_gen_id }} {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: {{ block.settings.background_color }};
+    border-top: 1px solid {{ block.settings.border_color }};
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+  }
+
+  .ai-sort-filter-bar__mobile-filters-{{ ai_gen_id }}.active {
+    display: block;
+  }
+
+  .ai-sort-filter-bar__mobile-filter-row-{{ ai_gen_id }} {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .ai-sort-filter-bar__mobile-filter-row-{{ ai_gen_id }}:last-child {
+    margin-bottom: 0;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-sort-filter-bar__container-{{ ai_gen_id }} {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+
+    .ai-sort-filter-bar__left-{{ ai_gen_id }} {
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .ai-sort-filter-bar__filter-group-{{ ai_gen_id }} {
+      display: none;
+    }
+
+    .ai-sort-filter-bar__mobile-toggle-{{ ai_gen_id }} {
+      display: flex;
+    }
+
+    .ai-sort-filter-bar__right-{{ ai_gen_id }} {
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .ai-sort-filter-bar__sort-select-{{ ai_gen_id }} {
+      flex: 1;
+      max-width: 200px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .ai-sort-filter-bar__title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_font_size | times: 0.9 }}px;
+    }
+
+    .ai-sort-filter-bar__sort-select-{{ ai_gen_id }} {
+      min-width: 120px;
+      font-size: {{ block.settings.sort_select_font_size | times: 0.9 }}px;
+    }
+
+    .ai-sort-filter-bar__container-{{ ai_gen_id }} {
+      gap: 8px;
+    }
+
+    .ai-sort-filter-bar__left-{{ ai_gen_id }} {
+      gap: 8px;
+    }
+  }
+{% endstyle %}
+
+<sort-filter-bar-{{ ai_gen_id }}
+  class="ai-sort-filter-bar-{{ ai_gen_id }}"
+  data-sticky-offset="{{ block.settings.sticky_offset }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-sort-filter-bar__container-{{ ai_gen_id }}">
+    <div class="ai-sort-filter-bar__left-{{ ai_gen_id }}">
+      {% if block.settings.show_title and block.settings.title != blank %}
+        <h2 class="ai-sort-filter-bar__title-{{ ai_gen_id }}">{{ block.settings.title }}</h2>
+      {% endif %}
+
+      {% if block.settings.show_results_count %}
+        <div class="ai-sort-filter-bar__results-count-{{ ai_gen_id }}">
+          <span id="ai-results-count-{{ ai_gen_id }}">{{ block.settings.default_results_count }} results</span>
+        </div>
+      {% endif %}
+
+      <div class="ai-sort-filter-bar__filter-group-{{ ai_gen_id }}">
+        {% if block.settings.show_category_filter %}
+          <button
+            class="ai-sort-filter-bar__filter-button-{{ ai_gen_id }}"
+            data-filter="category"
+            aria-expanded="false"
+          >
+            <span>Category</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        {% endif %}
+
+        {% if block.settings.show_price_filter %}
+          <button
+            class="ai-sort-filter-bar__filter-button-{{ ai_gen_id }}"
+            data-filter="price"
+            aria-expanded="false"
+          >
+            <span>Price</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        {% endif %}
+
+        {% if block.settings.show_brand_filter %}
+          <button
+            class="ai-sort-filter-bar__filter-button-{{ ai_gen_id }}"
+            data-filter="brand"
+            aria-expanded="false"
+          >
+            <span>Brand</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        {% endif %}
+
+        {% if block.settings.show_size_filter %}
+          <button
+            class="ai-sort-filter-bar__filter-button-{{ ai_gen_id }}"
+            data-filter="size"
+            aria-expanded="false"
+          >
+            <span>Size</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        {% endif %}
+
+        {% if block.settings.show_color_filter %}
+          <button
+            class="ai-sort-filter-bar__filter-button-{{ ai_gen_id }}"
+            data-filter="color"
+            aria-expanded="false"
+          >
+            <span>Color</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        {% endif %}
+
+        {% if block.settings.show_clear_filters %}
+          <a href="#" class="ai-sort-filter-bar__clear-filters-{{ ai_gen_id }}">
+            Clear all
+          </a>
+        {% endif %}
+      </div>
+
+      <button class="ai-sort-filter-bar__mobile-toggle-{{ ai_gen_id }}" aria-expanded="false">
+        <span>Filters</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="ai-sort-filter-bar__right-{{ ai_gen_id }}">
+      {% if block.settings.show_sort %}
+        <select class="ai-sort-filter-bar__sort-select-{{ ai_gen_id }}" aria-label="Sort products">
+          <option value="featured">Featured</option>
+          <option value="best-selling">Best selling</option>
+          <option value="title-ascending">Alphabetically, A-Z</option>
+          <option value="title-descending">Alphabetically, Z-A</option>
+          <option value="price-ascending">Price, low to high</option>
+          <option value="price-descending">Price, high to low</option>
+          <option value="created-ascending">Date, old to new</option>
+          <option value="created-descending">Date, new to old</option>
+        </select>
+      {% endif %}
+
+      {% if block.settings.show_view_toggle %}
+        <div class="ai-sort-filter-bar__view-toggle-{{ ai_gen_id }}">
+          <button
+            class="ai-sort-filter-bar__view-button-{{ ai_gen_id }} active"
+            data-view="grid"
+            aria-label="Grid view"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <rect x="1" y="1" width="6" height="6" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="9" y="1" width="6" height="6" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="1" y="9" width="6" height="6" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="9" y="9" width="6" height="6" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </button>
+          <button
+            class="ai-sort-filter-bar__view-button-{{ ai_gen_id }}"
+            data-view="list"
+            aria-label="List view"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <rect x="1" y="3" width="14" height="2" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="1" y="7" width="14" height="2" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="1" y="11" width="14" height="2" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </button>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="ai-sort-filter-bar__mobile-filters-{{ ai_gen_id }}">
+    <div class="ai-sort-filter-bar__mobile-filter-row-{{ ai_gen_id }}">
+      {% if block.settings.show_category_filter %}
+        <button class="ai-sort-filter-bar__filter-button-{{ ai_gen_id }}" data-filter="category">
+          Category
+        </button>
+      {% endif %}
+      {% if block.settings.show_price_filter %}
+        <button class="ai-sort-filter-bar__filter-button-{{ ai_gen_id }}" data-filter="price">
+          Price
+        </button>
+      {% endif %}
+      {% if block.settings.show_brand_filter %}
+        <button class="ai-sort-filter-bar__filter-button-{{ ai_gen_id }}" data-filter="brand">
+          Brand
+        </button>
+      {% endif %}
+    </div>
+    <div class="ai-sort-filter-bar__mobile-filter-row-{{ ai_gen_id }}">
+      {% if block.settings.show_size_filter %}
+        <button class="ai-sort-filter-bar__filter-button-{{ ai_gen_id }}" data-filter="size">
+          Size
+        </button>
+      {% endif %}
+      {% if block.settings.show_color_filter %}
+        <button class="ai-sort-filter-bar__filter-button-{{ ai_gen_id }}" data-filter="color">
+          Color
+        </button>
+      {% endif %}
+      {% if block.settings.show_clear_filters %}
+        <a href="#" class="ai-sort-filter-bar__clear-filters-{{ ai_gen_id }}">
+          Clear all
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</sort-filter-bar-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class SortFilterBar{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.mobileToggle = this.querySelector('.ai-sort-filter-bar__mobile-toggle-{{ ai_gen_id }}');
+        this.mobileFilters = this.querySelector('.ai-sort-filter-bar__mobile-filters-{{ ai_gen_id }}');
+        this.filterButtons = this.querySelectorAll('.ai-sort-filter-bar__filter-button-{{ ai_gen_id }}');
+        this.sortSelect = this.querySelector('.ai-sort-filter-bar__sort-select-{{ ai_gen_id }}');
+        this.viewButtons = this.querySelectorAll('.ai-sort-filter-bar__view-button-{{ ai_gen_id }}');
+        this.clearButton = this.querySelector('.ai-sort-filter-bar__clear-filters-{{ ai_gen_id }}');
+        this.resultsCount = this.querySelector('#ai-results-count-{{ ai_gen_id }}');
+        this.stickyOffset = parseInt(this.dataset.stickyOffset) || 0;
+      }
+
+      connectedCallback() {
+        this.setupEventListeners();
+        this.updateStickyPosition();
+        
+        window.addEventListener('load', () => {
+          this.updateStickyPosition();
+        });
+      }
+
+      setupEventListeners() {
+        if (this.mobileToggle) {
+          this.mobileToggle.addEventListener('click', () => {
+            this.toggleMobileFilters();
+          });
+        }
+
+        this.filterButtons.forEach(button => {
+          button.addEventListener('click', (e) => {
+            this.handleFilterClick(e);
+          });
+        });
+
+        if (this.sortSelect) {
+          this.sortSelect.addEventListener('change', (e) => {
+            this.handleSortChange(e);
+          });
+        }
+
+        this.viewButtons.forEach(button => {
+          button.addEventListener('click', (e) => {
+            this.handleViewChange(e);
+          });
+        });
+
+        if (this.clearButton) {
+          this.clearButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.clearAllFilters();
+          });
+        }
+
+        window.addEventListener('resize', () => {
+          this.updateStickyPosition();
+        });
+
+        window.addEventListener('scroll', () => {
+          this.updateStickyPosition();
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!this.contains(e.target)) {
+            this.closeMobileFilters();
+          }
+        });
+      }
+
+      updateStickyPosition() {
+        let offset = this.stickyOffset;
+        
+        const header = document.querySelector('header, .header, [data-section-type="header"]');
+        const announcement = document.querySelector('.announcement-bar, .announcement, [data-section-type="announcement"]');
+        const topBar = document.querySelector('.top-bar, .utility-bar');
+        
+        if (announcement && this.isElementVisible(announcement)) {
+          offset += announcement.offsetHeight;
+        }
+        
+        if (header && this.isElementVisible(header)) {
+          offset += header.offsetHeight;
+        }
+        
+        if (topBar && this.isElementVisible(topBar)) {
+          offset += topBar.offsetHeight;
+        }
+
+        this.style.top = `${offset}px`;
+      }
+
+      isElementVisible(element) {
+        const style = window.getComputedStyle(element);
+        return style.display !== 'none' && style.visibility !== 'hidden' && element.offsetHeight > 0;
+      }
+
+      toggleMobileFilters() {
+        const isExpanded = this.mobileToggle.getAttribute('aria-expanded') === 'true';
+        this.mobileToggle.setAttribute('aria-expanded', !isExpanded);
+        this.mobileFilters.classList.toggle('active');
+      }
+
+      closeMobileFilters() {
+        if (this.mobileToggle) {
+          this.mobileToggle.setAttribute('aria-expanded', 'false');
+        }
+        if (this.mobileFilters) {
+          this.mobileFilters.classList.remove('active');
+        }
+      }
+
+      handleFilterClick(e) {
+        const button = e.currentTarget;
+        const filterType = button.dataset.filter;
+        
+        button.classList.toggle('active');
+        
+        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', !isExpanded);
+
+        this.dispatchEvent(new CustomEvent('filterChange', {
+          detail: {
+            filterType: filterType,
+            active: button.classList.contains('active')
+          },
+          bubbles: true
+        }));
+      }
+
+      handleSortChange(e) {
+        const sortValue = e.target.value;
+        
+        this.dispatchEvent(new CustomEvent('sortChange', {
+          detail: {
+            sortBy: sortValue
+          },
+          bubbles: true
+        }));
+      }
+
+      handleViewChange(e) {
+        const button = e.currentTarget;
+        const viewType = button.dataset.view;
+
+        this.viewButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        this.dispatchEvent(new CustomEvent('viewChange', {
+          detail: {
+            viewType: viewType
+          },
+          bubbles: true
+        }));
+      }
+
+      clearAllFilters() {
+        this.filterButtons.forEach(button => {
+          button.classList.remove('active');
+          button.setAttribute('aria-expanded', 'false');
+        });
+
+        if (this.sortSelect) {
+          this.sortSelect.value = 'featured';
+        }
+
+        this.dispatchEvent(new CustomEvent('filtersCleared', {
+          bubbles: true
+        }));
+      }
+
+      updateResultsCount(count) {
+        if (this.resultsCount) {
+          this.resultsCount.textContent = `${count} result${count !== 1 ? 's' : ''}`;
+        }
+      }
+    }
+
+    customElements.define('sort-filter-bar-{{ ai_gen_id }}', SortFilterBar{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sort & filter bar",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "General"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Show title",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Products"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_results_count",
+      "label": "Show results count",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "default_results_count",
+      "label": "Default results count",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "sticky_offset",
+      "label": "Additional sticky offset",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "z_index",
+      "label": "Z-index",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Filter options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_category_filter",
+      "label": "Show category filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price_filter",
+      "label": "Show price filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_brand_filter",
+      "label": "Show brand filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_size_filter",
+      "label": "Show size filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_color_filter",
+      "label": "Show color filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_clear_filters",
+      "label": "Show clear filters button",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort",
+      "label": "Show sort dropdown",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_toggle",
+      "label": "Show view toggle",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Bar style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "label": "Vertical padding",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Shadow"
+    },
+    {
+      "type": "range",
+      "id": "shadow_horizontal",
+      "label": "Horizontal offset",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "shadow_vertical",
+      "label": "Vertical offset",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "shadow_blur",
+      "label": "Blur radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "shadow_opacity",
+      "label": "Shadow opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.1
+    },
+    {
+      "type": "header",
+      "content": "Title style"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "label": "Title font size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "title_font_weight",
+      "label": "Title font weight",
+      "options": [
+        {"value": "400", "label": "Normal"},
+        {"value": "500", "label": "Medium"},
+        {"value": "600", "label": "Semi-bold"},
+        {"value": "700", "label": "Bold"}
+      ],
+      "default": "600"
+    },
+    {
+      "type": "header",
+      "content": "Results count style"
+    },
+    {
+      "type": "color",
+      "id": "results_color",
+      "label": "Results count color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "results_font_size",
+      "label": "Results count font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Filter buttons"
+    },
+    {
+      "type": "color",
+      "id": "filter_button_bg",
+      "label": "Background color",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "filter_button_bg_hover",
+      "label": "Hover background color",
+      "default": "#e8e8e8"
+    },
+    {
+      "type": "color",
+      "id": "filter_button_bg_active",
+      "label": "Active background color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "filter_button_text",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "filter_button_text_hover",
+      "label": "Hover text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "filter_button_text_active",
+      "label": "Active text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "filter_button_border",
+      "label": "Border color",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "color",
+      "id": "filter_button_border_hover",
+      "label": "Hover border color",
+      "default": "#d5d5d5"
+    },
+    {
+      "type": "color",
+      "id": "filter_button_border_active",
+      "label": "Active border color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "filter_button_border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "filter_button_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "filter_button_font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "filter_button_font_weight",
+      "label": "Font weight",
+      "options": [
+        {"value": "400", "label": "Normal"},
+        {"value": "500", "label": "Medium"},
+        {"value": "600", "label": "Semi-bold"}
+      ],
+      "default": "500"
+    },
+    {
+      "type": "range",
+      "id": "button_padding_vertical",
+      "label": "Vertical padding",
+      "min": 4,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "button_padding_horizontal",
+      "label": "Horizontal padding",
+      "min": 8,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Sort dropdown"
+    },
+    {
+      "type": "color",
+      "id": "sort_select_bg",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "sort_select_text",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "sort_select_border",
+      "label": "Border color",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "range",
+      "id": "sort_select_border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "sort_select_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "sort_select_font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "View toggle"
+    },
+    {
+      "type": "color",
+      "id": "view_toggle_bg",
+      "label": "Background color",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "view_toggle_border",
+      "label": "Border color",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "range",
+      "id": "view_toggle_border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "view_toggle_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "color",
+      "id": "view_button_text",
+      "label": "Button text color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "view_button_text_hover",
+      "label": "Button hover text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "view_button_text_active",
+      "label": "Button active text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "view_button_bg_hover",
+      "label": "Button hover background",
+      "default": "#e8e8e8"
+    },
+    {
+      "type": "color",
+      "id": "view_button_bg_active",
+      "label": "Button active background",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "view_button_padding",
+      "label": "Button padding",
+      "min": 4,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "view_button_radius",
+      "label": "Button border radius",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Clear filters button"
+    },
+    {
+      "type": "color",
+      "id": "clear_button_text",
+      "label": "Text color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "clear_button_text_hover",
+      "label": "Hover text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "clear_button_bg_hover",
+      "label": "Hover background color",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "clear_button_border",
+      "label": "Border color",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "color",
+      "id": "clear_button_border_hover",
+      "label": "Hover border color",
+      "default": "#d5d5d5"
+    },
+    {
+      "type": "range",
+      "id": "clear_button_border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "clear_button_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "clear_button_font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Mobile toggle"
+    },
+    {
+      "type": "color",
+      "id": "mobile_toggle_bg",
+      "label": "Background color",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "mobile_toggle_bg_hover",
+      "label": "Hover background color",
+      "default": "#e8e8e8"
+    },
+    {
+      "type": "color",
+      "id": "mobile_toggle_text",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "mobile_toggle_text_hover",
+      "label": "Hover text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "mobile_toggle_border",
+      "label": "Border color",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "color",
+      "id": "mobile_toggle_border_hover",
+      "label": "Hover border color",
+      "default": "#d5d5d5"
+    },
+    {
+      "type": "range",
+      "id": "mobile_toggle_border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "mobile_toggle_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "mobile_toggle_font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sort & filter bar"
+    }
+  ]
+}
+{% endschema %}

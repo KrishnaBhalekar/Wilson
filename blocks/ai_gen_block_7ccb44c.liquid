@@ -1,0 +1,526 @@
+{% doc %}
+  @prompt
+    create the single block into it all the items are horizontal i want 3 items into it 1 menu, social media icons, 1 small country flag & link to it all is the horizontal, make it like that i will direct select the menu, i will also want to add the 5 socila icons & links, if the menu name is big it's come in single line only can't goes to second line., Do not add a fixed width to the section; it should take 33% width only if needed, otherwise the section can use the size it requires., at the place of linkedin add tik tok & the icon twitter will be X.
+    
+    icon of country will be in rectangle, i want top & bottom border
+
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-horizontal-bar-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: {{ block.settings.padding_vertical }}px {{ block.settings.padding_horizontal }}px;
+    background-color: {{ block.settings.background_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+    border-top: {{ block.settings.border_top_width }}px solid {{ block.settings.border_top_color }};
+    border-bottom: {{ block.settings.border_bottom_width }}px solid {{ block.settings.border_bottom_color }};
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .ai-horizontal-bar__menu-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.menu_gap }}px;
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .ai-horizontal-bar__menu-{{ ai_gen_id }} ul {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.menu_gap }}px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex-wrap: wrap;
+  }
+
+  .ai-horizontal-bar__menu-{{ ai_gen_id }} li {
+    flex-shrink: 0;
+  }
+
+  .ai-horizontal-bar__menu-{{ ai_gen_id }} a {
+    color: {{ block.settings.menu_text_color }};
+    text-decoration: none;
+    font-size: {{ block.settings.menu_font_size }}px;
+    font-weight: {{ block.settings.menu_font_weight }};
+    transition: color 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: {{ block.settings.menu_max_width }}px;
+    display: inline-block;
+  }
+
+  .ai-horizontal-bar__menu-{{ ai_gen_id }} a:hover {
+    color: {{ block.settings.menu_hover_color }};
+  }
+
+  {% if block.settings.enable_menu_wrap %}
+    .ai-horizontal-bar__menu-{{ ai_gen_id }} a {
+      white-space: normal;
+      word-wrap: break-word;
+      line-height: 1.2;
+      max-width: {{ block.settings.menu_max_width }}px;
+    }
+  {% endif %}
+
+  .ai-horizontal-bar__social-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: {{ block.settings.social_gap }}px;
+    flex: 0 1 auto;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .ai-horizontal-bar__social-link-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: {{ block.settings.social_icon_size }}px;
+    height: {{ block.settings.social_icon_size }}px;
+    color: {{ block.settings.social_icon_color }};
+    transition: color 0.3s ease, transform 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .ai-horizontal-bar__social-link-{{ ai_gen_id }}:hover {
+    color: {{ block.settings.social_icon_hover_color }};
+    transform: scale(1.1);
+  }
+
+  .ai-horizontal-bar__social-link-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ai-horizontal-bar__country-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 1 auto;
+    justify-content: flex-end;
+  }
+
+  .ai-horizontal-bar__country-link-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: {{ block.settings.country_text_color }};
+    text-decoration: none;
+    font-size: {{ block.settings.country_font_size }}px;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .ai-horizontal-bar__country-link-{{ ai_gen_id }}:hover {
+    color: {{ block.settings.country_hover_color }};
+  }
+
+  .ai-horizontal-bar__flag-{{ ai_gen_id }} {
+    width: {{ block.settings.flag_size }}px;
+    height: calc({{ block.settings.flag_size }}px * 0.67);
+    border-radius: 2px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border: 1px solid #e0e0e0;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-horizontal-bar-{{ ai_gen_id }} {
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .ai-horizontal-bar__menu-{{ ai_gen_id }},
+    .ai-horizontal-bar__social-{{ ai_gen_id }},
+    .ai-horizontal-bar__country-{{ ai_gen_id }} {
+      justify-content: center;
+      width: auto;
+    }
+
+    .ai-horizontal-bar__menu-{{ ai_gen_id }} ul {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .ai-horizontal-bar__menu-{{ ai_gen_id }} a {
+      max-width: 150px;
+    }
+
+    .ai-horizontal-bar__country-link-{{ ai_gen_id }} {
+      justify-content: center;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .ai-horizontal-bar__menu-{{ ai_gen_id }} a {
+      max-width: 120px;
+      font-size: {{ block.settings.menu_font_size | minus: 2 }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-horizontal-bar-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <nav class="ai-horizontal-bar__menu-{{ ai_gen_id }}">
+    {% if block.settings.menu != blank %}
+      <ul>
+        {% for link in linklists[block.settings.menu].links %}
+          <li>
+            <a href="{{ link.url }}" title="{{ link.title }}">{{ link.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </nav>
+
+  <div class="ai-horizontal-bar__social-{{ ai_gen_id }}">
+    {% if block.settings.facebook_url != blank %}
+      <a href="{{ block.settings.facebook_url }}" class="ai-horizontal-bar__social-link-{{ ai_gen_id }}" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+      </a>
+    {% endif %}
+
+    {% if block.settings.instagram_url != blank %}
+      <a href="{{ block.settings.instagram_url }}" class="ai-horizontal-bar__social-link-{{ ai_gen_id }}" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+      </a>
+    {% endif %}
+
+    {% if block.settings.twitter_url != blank %}
+      <a href="{{ block.settings.twitter_url }}" class="ai-horizontal-bar__social-link-{{ ai_gen_id }}" target="_blank" rel="noopener" aria-label="X (Twitter)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </a>
+    {% endif %}
+
+    {% if block.settings.youtube_url != blank %}
+      <a href="{{ block.settings.youtube_url }}" class="ai-horizontal-bar__social-link-{{ ai_gen_id }}" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        </svg>
+      </a>
+    {% endif %}
+
+    {% if block.settings.tiktok_url != blank %}
+      <a href="{{ block.settings.tiktok_url }}" class="ai-horizontal-bar__social-link-{{ ai_gen_id }}" target="_blank" rel="noopener" aria-label="TikTok">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+        </svg>
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="ai-horizontal-bar__country-{{ ai_gen_id }}">
+    {% if block.settings.country_link_url != blank %}
+      <a href="{{ block.settings.country_link_url }}" class="ai-horizontal-bar__country-link-{{ ai_gen_id }}">
+        {% if block.settings.country_flag %}
+          <img 
+            src="{{ block.settings.country_flag | image_url: width: 60}}" 
+            alt="{{ block.settings.country_text }}" 
+            class="ai-horizontal-bar__flag-{{ ai_gen_id }}"
+            width="30"
+            height="20"
+            loading="lazy"
+          >
+        {% endif %}
+        {% if block.settings.country_text != blank %}
+          <span>{{ block.settings.country_text }}</span>
+        {% endif %}
+      </a>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Horizontal navigation bar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "min": 5,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Vertical padding",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Borders"
+    },
+    {
+      "type": "range",
+      "id": "border_top_width",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Top border width",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "border_top_color",
+      "label": "Top border color",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "range",
+      "id": "border_bottom_width",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Bottom border width",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "border_bottom_color",
+      "label": "Bottom border color",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "header",
+      "content": "Menu"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_menu_wrap",
+      "label": "Allow menu text to wrap to multiple lines",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "menu_max_width",
+      "min": 80,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Maximum menu item width",
+      "default": 150
+    },
+    {
+      "type": "color",
+      "id": "menu_text_color",
+      "label": "Menu text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "menu_hover_color",
+      "label": "Menu hover color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "menu_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Menu font size",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "menu_font_weight",
+      "label": "Menu font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "menu_gap",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Menu spacing",
+      "default": 25
+    },
+    {
+      "type": "header",
+      "content": "Social media"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "twitter_url",
+      "label": "X (Twitter) URL"
+    },
+    {
+      "type": "url",
+      "id": "youtube_url",
+      "label": "YouTube URL"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "TikTok URL"
+    },
+    {
+      "type": "color",
+      "id": "social_icon_color",
+      "label": "Social icon color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "social_icon_hover_color",
+      "label": "Social icon hover color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "social_icon_size",
+      "min": 16,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Social icon size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "social_gap",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "px",
+      "label": "Social icon spacing",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Country selector"
+    },
+    {
+      "type": "image_picker",
+      "id": "country_flag",
+      "label": "Country flag image"
+    },
+    {
+      "type": "text",
+      "id": "country_text",
+      "label": "Country text",
+      "default": "United States"
+    },
+    {
+      "type": "url",
+      "id": "country_link_url",
+      "label": "Country link URL"
+    },
+    {
+      "type": "color",
+      "id": "country_text_color",
+      "label": "Country text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "country_hover_color",
+      "label": "Country hover color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "country_font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Country font size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "flag_size",
+      "min": 16,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Flag size",
+      "default": 24
+    }
+  ],
+  "presets": [
+    {
+      "name": "Horizontal navigation bar"
+    }
+  ]
+}
+{% endschema %}

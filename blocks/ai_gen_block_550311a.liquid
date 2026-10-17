@@ -1,0 +1,222 @@
+{% doc %}
+  @prompt
+    i want to add the custom font for the span into it i will add the custom font link to this also i will select the font weight.
+    
+    This style is applied to full site., i don't want to see the section to user it's for the  span font only
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  {% if block.settings.custom_font_url != blank %}
+    @import url('{{ block.settings.custom_font_url }}');
+  {% endif %}
+
+  {% comment %} Global span styling {% endcomment %}
+  span {
+    {% if block.settings.custom_font_family != blank %}
+      font-family: '{{ block.settings.custom_font_family }}', sans-serif !important;
+    {% endif %}
+    font-weight: {{ block.settings.span_font_weight }} !important;
+    {% if block.settings.apply_font_size %}
+      font-size: {{ block.settings.span_font_size }}px !important;
+    {% endif %}
+    {% if block.settings.apply_text_color %}
+      color: {{ block.settings.span_text_color }} !important;
+    {% endif %}
+    {% if block.settings.apply_letter_spacing %}
+      letter-spacing: {{ block.settings.letter_spacing }} !important;
+    {% endif %}
+    {% if block.settings.apply_text_transform %}
+      text-transform: {{ block.settings.text_transform }} !important;
+    {% endif %}
+    {% if block.settings.apply_font_style %}
+      font-style: {{ block.settings.font_style }} !important;
+    {% endif %}
+  }
+
+  {% comment %} Specific span classes if needed {% endcomment %}
+  {% if block.settings.target_specific_spans %}
+    .{{ block.settings.span_class_name }} {
+      {% if block.settings.custom_font_family != blank %}
+        font-family: '{{ block.settings.custom_font_family }}', sans-serif !important;
+      {% endif %}
+      font-weight: {{ block.settings.span_font_weight }} !important;
+      {% if block.settings.apply_font_size %}
+        font-size: {{ block.settings.span_font_size }}px !important;
+      {% endif %}
+      {% if block.settings.apply_text_color %}
+        color: {{ block.settings.span_text_color }} !important;
+      {% endif %}
+      {% if block.settings.apply_letter_spacing %}
+        letter-spacing: {{ block.settings.letter_spacing }} !important;
+      {% endif %}
+      {% if block.settings.apply_text_transform %}
+        text-transform: {{ block.settings.text_transform }} !important;
+      {% endif %}
+      {% if block.settings.apply_font_style %}
+        font-style: {{ block.settings.font_style }} !important;
+      {% endif %}
+    }
+  {% endif %}
+
+  {% comment %} Hide this block completely {% endcomment %}
+  .ai-hidden-font-block-{{ ai_gen_id }} {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
+    left: -9999px !important;
+  }
+{% endstyle %}
+
+{% comment %} Hidden container - completely invisible to users {% endcomment %}
+<div class="ai-hidden-font-block-{{ ai_gen_id }}" {{ block.shopify_attributes }} aria-hidden="true"></div>
+
+{% schema %}
+{
+  "name": "Global span font",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Custom font setup"
+    },
+    {
+      "type": "text",
+      "id": "custom_font_url",
+      "label": "Font URL",
+      "placeholder": "https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap",
+      "info": "Paste the complete font import URL (Google Fonts, Adobe Fonts, etc.)"
+    },
+    {
+      "type": "text",
+      "id": "custom_font_family",
+      "label": "Font family name",
+      "placeholder": "Roboto",
+      "info": "Enter the exact font family name (case sensitive)"
+    },
+    {
+      "type": "header",
+      "content": "Span targeting"
+    },
+    {
+      "type": "checkbox",
+      "id": "target_specific_spans",
+      "label": "Target specific span class only",
+      "default": false,
+      "info": "If enabled, only spans with the specified class will be affected"
+    },
+    {
+      "type": "text",
+      "id": "span_class_name",
+      "label": "Span class name",
+      "placeholder": "custom-span",
+      "info": "Only applies if 'Target specific span class only' is enabled"
+    },
+    {
+      "type": "header",
+      "content": "Font properties"
+    },
+    {
+      "type": "select",
+      "id": "span_font_weight",
+      "label": "Font weight",
+      "options": [
+        { "value": "100", "label": "100 - Thin" },
+        { "value": "200", "label": "200 - Extra Light" },
+        { "value": "300", "label": "300 - Light" },
+        { "value": "400", "label": "400 - Regular" },
+        { "value": "500", "label": "500 - Medium" },
+        { "value": "600", "label": "600 - Semi Bold" },
+        { "value": "700", "label": "700 - Bold" },
+        { "value": "800", "label": "800 - Extra Bold" },
+        { "value": "900", "label": "900 - Black" }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "checkbox",
+      "id": "apply_font_size",
+      "label": "Override font size",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "span_font_size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 14
+    },
+    {
+      "type": "checkbox",
+      "id": "apply_text_color",
+      "label": "Override text color",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "span_text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "apply_font_style",
+      "label": "Override font style",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "font_style",
+      "label": "Font style",
+      "options": [
+        { "value": "normal", "label": "Normal" },
+        { "value": "italic", "label": "Italic" },
+        { "value": "oblique", "label": "Oblique" }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "checkbox",
+      "id": "apply_text_transform",
+      "label": "Override text transform",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "text_transform",
+      "label": "Text transform",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "capitalize", "label": "Capitalize" },
+        { "value": "uppercase", "label": "Uppercase" },
+        { "value": "lowercase", "label": "Lowercase" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "checkbox",
+      "id": "apply_letter_spacing",
+      "label": "Override letter spacing",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "letter_spacing",
+      "label": "Letter spacing",
+      "default": "0em",
+      "info": "Use CSS units like 0.1em, 1px, etc."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Global span font"
+    }
+  ]
+}
+{% endschema %}

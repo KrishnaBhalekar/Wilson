@@ -1,0 +1,672 @@
+{% doc %}
+  @prompt
+    i want  the the filter bar horizontal for this collection page in one line into the left side of horizontal line all th filte options like the sort & filter , size all the remaning & the right side i will select the grid view like the 1 2 3 4, i want  the the filter bar horizontal for this collection page in one line into the left side of horizontal line all th filte options like the sort & filter , size all the remaning & the right side i will select the grid view like the 1 2 3 4 into the icon.
+    
+    i dont want the lables add the placeholder clear to everybody., when i click onto the any filter the below product automatically filter accordingly to it also give me option to on of the grid view option>
+    
+    check once the filter & sort works accordingly, i also want the option to hide the grid view 1 2 3 4, i also want the option of the category Selection
+    
+    also me it sticky at the top, filter the products on that page dont add your products into this page, make this bar sticky at the top
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-collection-filter-bar-{{ ai_gen_id }} {
+    position: -webkit-sticky;
+    position: sticky;
+    top: {{ block.settings.sticky_top_offset }}px;
+    left: 0;
+    right: 0;
+    z-index: {{ block.settings.z_index }};
+    background-color: {{ block.settings.background_color }};
+    border-bottom: 1px solid {{ block.settings.border_color }};
+    padding: {{ block.settings.padding_vertical }}px {{ block.settings.padding_horizontal }}px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 100%;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .ai-collection-filter-container-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 20px;
+  }
+
+  .ai-collection-filters-left-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  .ai-collection-filters-right-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ai-filter-select-{{ ai_gen_id }} {
+    padding: 8px 12px;
+    border: 1px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+    background-color: {{ block.settings.input_background_color }};
+    color: {{ block.settings.text_color }};
+    font-size: 14px;
+    min-width: 120px;
+    cursor: pointer;
+  }
+
+  .ai-filter-select-{{ ai_gen_id }}:focus {
+    outline: 2px solid {{ block.settings.accent_color }};
+    outline-offset: 2px;
+  }
+
+  .ai-grid-toggle-{{ ai_gen_id }} {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .ai-grid-btn-{{ ai_gen_id }} {
+    width: 32px;
+    height: 32px;
+    border: 1px solid {{ block.settings.input_border_color }};
+    background-color: {{ block.settings.input_background_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .ai-grid-btn-{{ ai_gen_id }}.active {
+    background-color: {{ block.settings.accent_color }};
+    border-color: {{ block.settings.accent_color }};
+    color: white;
+  }
+
+  .ai-grid-btn-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.accent_color }};
+    border-color: {{ block.settings.accent_color }};
+    color: white;
+  }
+
+  .ai-grid-icon-{{ ai_gen_id }} {
+    width: 16px;
+    height: 16px;
+    display: grid;
+    gap: 2px;
+  }
+
+  .ai-grid-icon-1-{{ ai_gen_id }} {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
+  }
+
+  .ai-grid-icon-2-{{ ai_gen_id }} {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+
+  .ai-grid-icon-3-{{ ai_gen_id }} {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+
+  .ai-grid-icon-4-{{ ai_gen_id }} {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+
+  .ai-grid-dot-{{ ai_gen_id }} {
+    background-color: currentColor;
+    border-radius: 1px;
+  }
+
+  .ai-price-range-{{ ai_gen_id }} {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .ai-price-input-{{ ai_gen_id }} {
+    width: 80px;
+    padding: 6px 8px;
+    border: 1px solid {{ block.settings.input_border_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+    background-color: {{ block.settings.input_background_color }};
+    color: {{ block.settings.text_color }};
+    font-size: 12px;
+  }
+
+  .ai-clear-filters-{{ ai_gen_id }} {
+    padding: 6px 12px;
+    background-color: transparent;
+    color: {{ block.settings.accent_color }};
+    border: 1px solid {{ block.settings.accent_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+    cursor: pointer;
+    font-size: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .ai-clear-filters-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.accent_color }};
+    color: white;
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-collection-filter-container-{{ ai_gen_id }} {
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .ai-collection-filters-left-{{ ai_gen_id }} {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .ai-collection-filters-right-{{ ai_gen_id }} {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .ai-filter-select-{{ ai_gen_id }} {
+      min-width: 100px;
+      font-size: 12px;
+    }
+
+    {% unless block.settings.show_grid_view %}
+      .ai-collection-filters-right-{{ ai_gen_id }} {
+        display: none;
+      }
+    {% endunless %}
+  }
+
+  {% unless block.settings.show_grid_view %}
+    .ai-collection-filters-right-{{ ai_gen_id }} {
+      display: none;
+    }
+  {% endunless %}
+{% endstyle %}
+
+<collection-filter-bar-{{ ai_gen_id }}
+  class="ai-collection-filter-bar-{{ ai_gen_id }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="ai-collection-filter-container-{{ ai_gen_id }}">
+    <div class="ai-collection-filters-left-{{ ai_gen_id }}">
+      {% if block.settings.show_category_filter %}
+        <select class="ai-filter-select-{{ ai_gen_id }}" data-filter="category">
+          <option value="">All Categories</option>
+          {% for collection in collections %}
+            {% if collection.products_count > 0 %}
+              <option value="{{ collection.handle }}" {% if collection.handle == collection.handle %}selected{% endif %}>
+                {{ collection.title }}
+              </option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      {% endif %}
+
+      {% if block.settings.show_sort_filter %}
+        <select class="ai-filter-select-{{ ai_gen_id }}" data-filter="sort">
+          <option value="">Sort by</option>
+          <option value="title-ascending">Name A-Z</option>
+          <option value="title-descending">Name Z-A</option>
+          <option value="price-ascending">Price Low to High</option>
+          <option value="price-descending">Price High to Low</option>
+          <option value="created-descending">Newest</option>
+          <option value="created-ascending">Oldest</option>
+          <option value="best-selling">Best Selling</option>
+        </select>
+      {% endif %}
+
+      {% if block.settings.show_size_filter %}
+        <select class="ai-filter-select-{{ ai_gen_id }}" data-filter="size">
+          <option value="">Size</option>
+          <option value="xs">XS</option>
+          <option value="s">S</option>
+          <option value="m">M</option>
+          <option value="l">L</option>
+          <option value="xl">XL</option>
+          <option value="xxl">XXL</option>
+        </select>
+      {% endif %}
+
+      {% if block.settings.show_color_filter %}
+        <select class="ai-filter-select-{{ ai_gen_id }}" data-filter="color">
+          <option value="">Color</option>
+          <option value="black">Black</option>
+          <option value="white">White</option>
+          <option value="red">Red</option>
+          <option value="blue">Blue</option>
+          <option value="green">Green</option>
+          <option value="yellow">Yellow</option>
+          <option value="pink">Pink</option>
+          <option value="purple">Purple</option>
+          <option value="orange">Orange</option>
+          <option value="brown">Brown</option>
+          <option value="gray">Gray</option>
+        </select>
+      {% endif %}
+
+      {% if block.settings.show_price_filter %}
+        <div class="ai-price-range-{{ ai_gen_id }}">
+          <input 
+            type="number" 
+            class="ai-price-input-{{ ai_gen_id }}" 
+            placeholder="Min ₹" 
+            data-filter="price-min"
+          >
+          <span>-</span>
+          <input 
+            type="number" 
+            class="ai-price-input-{{ ai_gen_id }}" 
+            placeholder="Max ₹" 
+            data-filter="price-max"
+          >
+        </div>
+      {% endif %}
+
+      <a href="#" class="ai-clear-filters-{{ ai_gen_id }}">Clear All</a>
+    </div>
+
+    {% if block.settings.show_grid_view %}
+      <div class="ai-collection-filters-right-{{ ai_gen_id }}">
+        <div class="ai-grid-toggle-{{ ai_gen_id }}">
+          <button class="ai-grid-btn-{{ ai_gen_id }} active" data-grid="1" aria-label="1 column">
+            <div class="ai-grid-icon-{{ ai_gen_id }} ai-grid-icon-1-{{ ai_gen_id }}">
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+            </div>
+          </button>
+          <button class="ai-grid-btn-{{ ai_gen_id }}" data-grid="2" aria-label="2 columns">
+            <div class="ai-grid-icon-{{ ai_gen_id }} ai-grid-icon-2-{{ ai_gen_id }}">
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+            </div>
+          </button>
+          <button class="ai-grid-btn-{{ ai_gen_id }}" data-grid="3" aria-label="3 columns">
+            <div class="ai-grid-icon-{{ ai_gen_id }} ai-grid-icon-3-{{ ai_gen_id }}">
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+            </div>
+          </button>
+          <button class="ai-grid-btn-{{ ai_gen_id }}" data-grid="4" aria-label="4 columns">
+            <div class="ai-grid-icon-{{ ai_gen_id }} ai-grid-icon-4-{{ ai_gen_id }}">
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+              <div class="ai-grid-dot-{{ ai_gen_id }}"></div>
+            </div>
+          </button>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</collection-filter-bar-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class CollectionFilterBar{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+        this.productSelectors = [
+          '.product-item',
+          '.product-card', 
+          '.grid__item',
+          '.product',
+          '.collection-product-card',
+          '[data-product-id]'
+        ];
+        this.gridContainer = null;
+        this.products = [];
+        this.activeFilters = {};
+      }
+
+      connectedCallback() {
+        this.findProducts();
+        this.setupEventListeners();
+        this.setupGridToggle();
+      }
+
+      findProducts() {
+        for (let selector of this.productSelectors) {
+          this.products = document.querySelectorAll(selector);
+          if (this.products.length > 0) {
+            this.gridContainer = this.products[0].parentElement;
+            break;
+          }
+        }
+      }
+
+      setupEventListeners() {
+        const selects = this.querySelectorAll('[data-filter]');
+        const clearBtn = this.querySelector('.ai-clear-filters-{{ ai_gen_id }}');
+
+        selects.forEach(select => {
+          select.addEventListener('change', (e) => {
+            this.handleFilterChange(e.target.dataset.filter, e.target.value);
+          });
+        });
+
+        const priceInputs = this.querySelectorAll('.ai-price-input-{{ ai_gen_id }}');
+        priceInputs.forEach(input => {
+          input.addEventListener('input', (e) => {
+            clearTimeout(this.priceTimeout);
+            this.priceTimeout = setTimeout(() => {
+              this.handleFilterChange(e.target.dataset.filter, e.target.value);
+            }, 500);
+          });
+        });
+
+        clearBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.clearAllFilters();
+        });
+      }
+
+      setupGridToggle() {
+        const gridBtns = this.querySelectorAll('[data-grid]');
+        
+        gridBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            gridBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const columns = btn.dataset.grid;
+            this.updateGridLayout(columns);
+          });
+        });
+      }
+
+      updateGridLayout(columns) {
+        if (!this.gridContainer) return;
+
+        this.gridContainer.style.display = 'grid';
+        this.gridContainer.style.gap = '20px';
+        
+        switch(columns) {
+          case '1':
+            this.gridContainer.style.gridTemplateColumns = '1fr';
+            break;
+          case '2':
+            this.gridContainer.style.gridTemplateColumns = 'repeat(2, 1fr)';
+            break;
+          case '3':
+            this.gridContainer.style.gridTemplateColumns = 'repeat(3, 1fr)';
+            break;
+          case '4':
+            this.gridContainer.style.gridTemplateColumns = 'repeat(4, 1fr)';
+            break;
+        }
+
+        const mediaQuery = window.matchMedia('(max-width: 768px)');
+        if (mediaQuery.matches) {
+          if (columns > 2) {
+            this.gridContainer.style.gridTemplateColumns = 'repeat(2, 1fr)';
+          }
+        }
+      }
+
+      handleFilterChange(filterType, value) {
+        if (filterType === 'category' && value) {
+          window.location.href = `/collections/${value}`;
+          return;
+        }
+
+        if (filterType === 'sort' && value) {
+          const url = new URL(window.location);
+          url.searchParams.set('sort_by', value);
+          window.location.href = url.toString();
+          return;
+        }
+
+        if (value) {
+          this.activeFilters[filterType] = value;
+        } else {
+          delete this.activeFilters[filterType];
+        }
+
+        this.filterProducts();
+      }
+
+      filterProducts() {
+        this.products.forEach(product => {
+          let shouldShow = true;
+
+          Object.entries(this.activeFilters).forEach(([filterType, filterValue]) => {
+            const productText = product.textContent.toLowerCase();
+            const productData = product.dataset;
+
+            switch(filterType) {
+              case 'size':
+                if (!productText.includes(filterValue.toLowerCase()) && 
+                    !productData.size?.includes(filterValue)) {
+                  shouldShow = false;
+                }
+                break;
+              case 'color':
+                if (!productText.includes(filterValue.toLowerCase()) && 
+                    !productData.color?.includes(filterValue)) {
+                  shouldShow = false;
+                }
+                break;
+              case 'price-min':
+                const priceMin = parseFloat(filterValue);
+                const productPrice = this.extractPrice(product);
+                if (productPrice && productPrice < priceMin) {
+                  shouldShow = false;
+                }
+                break;
+              case 'price-max':
+                const priceMax = parseFloat(filterValue);
+                const productPriceMax = this.extractPrice(product);
+                if (productPriceMax && productPriceMax > priceMax) {
+                  shouldShow = false;
+                }
+                break;
+            }
+          });
+
+          product.style.display = shouldShow ? 'block' : 'none';
+        });
+      }
+
+      extractPrice(product) {
+        const priceElement = product.querySelector('.price, .product-price, [data-price]');
+        if (priceElement) {
+          const priceText = priceElement.textContent.replace(/[^\d.]/g, '');
+          return parseFloat(priceText);
+        }
+        return null;
+      }
+
+      clearAllFilters() {
+        this.activeFilters = {};
+        
+        const selects = this.querySelectorAll('select[data-filter]');
+        const inputs = this.querySelectorAll('input[data-filter]');
+        
+        selects.forEach(select => select.value = '');
+        inputs.forEach(input => input.value = '');
+        
+        this.products.forEach(product => {
+          product.style.display = 'block';
+        });
+      }
+    }
+
+    customElements.define('collection-filter-bar-{{ ai_gen_id }}', CollectionFilterBar{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Collection filter bar",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Sticky positioning"
+    },
+    {
+      "type": "range",
+      "id": "sticky_top_offset",
+      "min": 0,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Top offset",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "z_index",
+      "label": "Z-index",
+      "options": [
+        { "value": "100", "label": "100" },
+        { "value": "500", "label": "500" },
+        { "value": "1000", "label": "1000" },
+        { "value": "1500", "label": "1500" },
+        { "value": "2000", "label": "2000" }
+      ],
+      "default": "1000"
+    },
+    {
+      "type": "header",
+      "content": "Filter options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_category_filter",
+      "label": "Show category filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort_filter",
+      "label": "Show sort filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_size_filter",
+      "label": "Show size filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_color_filter",
+      "label": "Show color filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price_filter",
+      "label": "Show price filter",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_grid_view",
+      "label": "Show grid view toggle",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "color",
+      "id": "input_background_color",
+      "label": "Input background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "input_border_color",
+      "label": "Input border color",
+      "default": "#cccccc"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "min": 5,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Vertical padding",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection filter bar"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,286 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "gp_section_585804337406542621": {
+      "type": "gp-section-585804337406542621",
+      "settings": {
+        "section_preload": "true",
+        "checksum": "df2b398422bcad56acd96f49b4dcbd33faa5b57ac62e7918c34b114559a8a335_1_1_1_0__1",
+        "ggJs00tBBOH_text": "Ace Autumn",
+        "gg8MGr8DKVw_text": "<p>From honeyed afternoons to crisp mornings, fall in love with hues inspired by autumn’s ephemeral decadence and styles to match fall’s fresh-start furor.</p>",
+        "ggg9nvReXXc_label": "<p>SHOP WOMEN'S NEW ARRIVAL</p>",
+        "ggdD8yltwdt_label": "<p>SHOP MEN'S NEW ARRIVAL</p>"
+      }
+    },
+    "gp_section_586705103499559602": {
+      "type": "gp-section-586705103499559602",
+      "settings": {
+        "section_preload": "false",
+        "checksum": "4237d2e1ba3578baeaf9a482b62d31286394fb02916b0336c3d18b24bd246627_1_1_1_0__1",
+        "ggk9ZHhymr5_text": "Ace Autumn",
+        "gg2xGQ43chE_text": "<p>From honeyed afternoons to crisp mornings, fall in love with hues inspired by autumn’s ephemeral decadence and styles to match fall’s fresh-start furor.</p>",
+        "ggI0RtwJ7Av_label": "<p>SHOP WOMEN'S NEW ARRIVAL</p>",
+        "ggX1stRX5i7_label": "<p>SHOP MEN'S NEW ARRIVAL</p>"
+      }
+    },
+    "gp_section_585816648745747229": {
+      "type": "gp-section-585816648745747229",
+      "settings": {
+        "section_preload": "false",
+        "checksum": "32ea6312cea2d37985df596062a51264d945ae186cc2448449132bf94dfc0248_1_1_1_0__1",
+        "gg1aWBw_H9d_text": "Shop by Category"
+      }
+    },
+    "gp_section_585818038788424539": {
+      "type": "gp-section-585818038788424539",
+      "settings": {
+        "section_preload": "false",
+        "checksum": "1023f6b972108c890bd732ecdc288dbc717a4b1c104c9e30b15908f9cc403ce0_1_1_1_0__1",
+        "ggcLODTJWlP_text": "Women's Tops",
+        "ggPW_ZnpiSN_text": "Women's Bottoms",
+        "ggKuAAo76cD_text": "Men's Tops",
+        "gg-YL0HnhJK_text": "Men's Bottoms"
+      }
+    },
+    "gp_section_586706161554686598": {
+      "type": "gp-section-586706161554686598",
+      "settings": {
+        "section_preload": "false",
+        "checksum": "f23bb90ffe289580ea809fd664b54a6bfeee5e3d46a73a53c72f58b5d9e23ad2_1_1_1_0__1",
+        "ggFYyRRIcw6_text": "Men's Bottoms",
+        "ggFJRIX9Jj1_text": "Men's Bottoms",
+        "gg-GV6S9qVc_text": "Men's Bottoms",
+        "ggbIvQwayPs_text": "Men's Bottoms"
+      }
+    },
+    "gp_section_586978582690005561": {
+      "type": "gp-section-586978582690005561",
+      "settings": {
+        "section_preload": "false",
+        "checksum": "3c9bac451333c4a7de1d2aa1d241f55ce4f979a72f9b359429f484f2487fd327_1_1_1_0__1",
+        "ggzFKUB4tK2_text": "Classic Luxury<br>Meets Modern Elegance",
+        "gghHPZzNB77_text": "<p><span style=\"background-color:rgb(255,255,255);color:rgb(21,25,29);font-size:18px;\">Introducing the Laver Cup 2025 Collection.</span></p>",
+        "gg8ZOX4PA4f_label": "<p>SHOP NOW</p>"
+      }
+    },
+    "gp_section_585821266422792899": {
+      "type": "gp-section-585821266422792899",
+      "settings": {
+        "section_preload": "false",
+        "checksum": "ba00a96884ae8f465aef2f22e8d25ef0a574af04dc83b99906ad75e75e2c3930_1_1_1_0__1",
+        "ggdxh6OLXcV_text": "Classic Luxury<br>Meets Modern Elegance",
+        "ggji6x5MA1H_text": "<p><span style=\"background-color:rgb(255,255,255);color:rgb(21,25,29);font-size:18px;\">Introducing the Laver Cup 2025 Collection.</span></p>",
+        "ggIh3Ql79fV_label": "<p>SHOP NOW</p>"
+      }
+    },
+    "gp_section_585824563145736899": {
+      "type": "gp-section-585824563145736899",
+      "settings": {
+        "section_preload": "false",
+        "checksum": "6162e0a10af41e3ec9a4ce02f77672e4ecb3ab01af0bf078ab45efc15beba5dd_1_1_1_0__1",
+        "ggWZGeyL-1X_text": "Dres Shop: Fall Edit",
+        "gg8T-oMhiHo_text": "<p>Fall in love again and again with your favorite tennis dresses in new autumn-gilded hues.</p>",
+        "ggdR7rnxqDX_label": "<p>EXPLORE THE DRESS SHOP</p>"
+      }
+    },
+    "gp_section_585828310135603907": {
+      "type": "gp-section-585828310135603907",
+      "settings": {
+        "section_preload": "false",
+        "checksum": "923ae20c23f2ef6c2d3041bda18ea43dc7d9ac7f37cabe81bb4fba2bf953df1d_1_1_1_0__1",
+        "ggCYsnL4WKN_text": "Court-Born.<br>Street Tuned.",
+        "ggiR_Gmrc6N_text": "<p>From court to street, the Pro Staff 87 Mid blends heritage design with updated comfort. A true tennis classic—refined for today, ready for everywhere.</p>",
+        "ggjZb0NZktE_label": "<p>Shop Pro Staff Mid Shoes</p>"
+      }
+    },
+    "gp_section_585831126409413323": {
+      "type": "gp-section-585831126409413323",
+      "settings": {
+        "section_preload": "false",
+        "checksum": "2a6430d75f4599fae16a299c7de439c13fbb86243878217471cb479d89567a6d_1_1_1_0__1",
+        "ggoQBmLD2Ft_text": "Shop By Sport"
+      }
+    },
+    "gp_section_585831382748496587": {
+      "type": "gp-section-585831382748496587",
+      "settings": {
+        "section_preload": "false",
+        "checksum": "f4dc0be1d7dd74d0ae19662573382d72abeafcd5760e406bb07876fe28021a23_1_1_1_0__1",
+        "ggQyVXzT5fb_text": "<p><a href=\"https://www.wilson.com/en-us/baseball\">BASEBALL</a></p>",
+        "gg-JEeUnA8d_text": "<p><a href=\"https://www.wilson.com/en-us/basketball\">Basketball</a></p>",
+        "gg-MDEESlH1_text": "<p><a href=\"https://www.wilson.com/en-us/fastpitch\">FASTPITCH</a></p>",
+        "ggY5MVQiqoF_text": "<p>Rugby</p>",
+        "gg2K0xNibJ1_text": "<p>golf</p>",
+        "ggI997A3UZh_text": "<p><a href=\"https://www.wilson.com/en-us/pickleball\">PICKLEBALL</a></p>",
+        "gg3WXHcMaMk_text": "<p><a href=\"https://www.wilson.com/en-us/tennis\">TENNIS</a></p>",
+        "gg1t7Z210eI_text": "<p><a href=\"https://www.wilson.com/en-us/volleyball\">VOLLEYBALL</a></p>"
+      }
+    },
+    "gp_section_585837899757388483": {
+      "type": "gp-section-585837899757388483",
+      "settings": {
+        "section_preload": "false",
+        "checksum": "1958597326c2ec6551b3fae9b59fbebd2bb79d9e92f1d9f53fd9c7ad3a2bb331_1_1_1_0__1",
+        "ggx8VwtpM03_text": "Shop By Sport"
+      }
+    },
+    "product_block_jYT6kD": {
+      "type": "product-block",
+      "name": "t:sections.product_block.presets.name",
+      "settings": {
+        "container": "container",
+        "padding_full_width": 0,
+        "disable_padding_content": false,
+        "enable_border_top": false,
+        "enable_border_bottom": false,
+        "border_height": 1,
+        "color_border_bottom": "#e8e8e8",
+        "enable_minus_mg_top": false,
+        "minus_spacing_top": -100,
+        "product_block_layout": "scroll",
+        "product_bg": "#ffffff",
+        "product_bg_gradient": "",
+        "product_block_collection": "all",
+        "product_block_limit": 6,
+        "grid_gap": 30,
+        "pb_style": "style1",
+        "style_block_header": "style1",
+        "product_block_title": "",
+        "enable_border_title": false,
+        "enable_border_title_style2": false,
+        "fontsize_title": 16,
+        "fontsize_title_mb": 16,
+        "pd_top_title": 30,
+        "mg_bottom_title": 12,
+        "mg_bottom_title_mb": 12,
+        "border_color_title": "#232323",
+        "color_title": "#232323",
+        "title_align": "left",
+        "title_align_mb": "left",
+        "view_all": "",
+        "view_all_fs": 16,
+        "view_all_align": "left",
+        "font_weight_view_all": "400",
+        "mg_bottom_view": 30,
+        "mg_bottom_view_mb": 0,
+        "enable_border_view_all": true,
+        "link_view_all": "",
+        "color_view_all": "#3c3c3c",
+        "icon_view_all": "",
+        "color_view_all_icon": "#eb492f",
+        "view_all_icon_side": "left",
+        "spacing_view_all_icon": 0,
+        "button_text": "Show More",
+        "button_text_font_size": 14,
+        "button_text_font_weight": "500",
+        "button_text_text_transform": "uppercase",
+        "product_button_width": 270,
+        "pd_top_product_button": 12,
+        "pd_bottom_product_button": 12,
+        "button_icon": "",
+        "mg_bottom_button": 55,
+        "enable_button_shadow": false,
+        "color_button": "#ffffff",
+        "border_color_button": "#232323",
+        "bg_color_button": "#232323",
+        "bg_color_gradient_button": "",
+        "color_button_hover": "",
+        "border_color_button_hover": "",
+        "bg_color_button_hover": "",
+        "bg_color_gradient_button_hover": "",
+        "style_countdown": "style_1",
+        "countdown": "",
+        "font_size_countdown_text": 14,
+        "color_countdown": "#f42b23",
+        "countdown_margin_left": 15,
+        "product_block_per_row": "4",
+        "product_block_infinite_scroll": true,
+        "product_block_swipe_on_mobile": true,
+        "enable_product_card_pd_bottom": false,
+        "product_card_pd_bottom": 40,
+        "product_block_dots": false,
+        "product_block_dots_mb": true,
+        "spacing_top_dots": 0,
+        "product_block_arrows": true,
+        "product_block_arrows_mb": false,
+        "enable_hover_arrow": false,
+        "product_block_progress_bar": false,
+        "product_block_counter_number": false,
+        "enable_infinite": true,
+        "enable_autoplay": false,
+        "display_product_outside_container": false,
+        "product_block_arrows_custom_position": false,
+        "position_vertical_arrow": "70px",
+        "use_special_arrow_position": false,
+        "spacing_bottom": 0,
+        "spacing_right": 0,
+        "product_block_show": "5",
+        "button_text_slider": "",
+        "button_link_slider": "",
+        "enable_button_icon": false,
+        "button_width": 280,
+        "btn_spacing_top": 49,
+        "product_block_per_view": "4",
+        "show_half": false,
+        "scroll_width": 100,
+        "scroll_height": 4,
+        "scroll_track_bg": "#f1f1f1",
+        "scroll_thumb_color": "#000000",
+        "scroll_thumb_hover_color": "#444444",
+        "position": "left",
+        "width_banner": 40,
+        "enable_image_mb": true,
+        "display_list_collection": false,
+        "collection_color": "#202020",
+        "collection_color_hover": "#3e8cc4",
+        "collection_bg_color": "#ffffff",
+        "collection_bg_color_gradient": "",
+        "text_list": "View all categories",
+        "url_list": "",
+        "enable_layout_special": false,
+        "bg_card": "#ffffff",
+        "padding_card": 15,
+        "border_radius_card": 5,
+        "border_layout_card": "full",
+        "border_width_card": 5,
+        "border_color_card": "#f0f1f4",
+        "enable_custom_color": false,
+        "product_vendor_color": "#010101",
+        "product_title_color": "#505050",
+        "product_title_color_hover": "#505050",
+        "product_price_color": "#010101",
+        "product_price_sale_color": "#d12442",
+        "product_price_compare_color": "#808080",
+        "mg_top_desktop": 0,
+        "mg_top_tablet": 0,
+        "mg_top_mobile": 0,
+        "mg_bottom_desktop": 70,
+        "mg_bottom_tablet": 20,
+        "mg_bottom_mobile": 20
+      }
+    }
+  },
+  "order": [
+    "gp_section_585804337406542621",
+    "gp_section_586705103499559602",
+    "gp_section_585816648745747229",
+    "gp_section_585818038788424539",
+    "gp_section_586706161554686598",
+    "gp_section_586978582690005561",
+    "gp_section_585821266422792899",
+    "gp_section_585824563145736899",
+    "gp_section_585828310135603907",
+    "gp_section_585831126409413323",
+    "gp_section_585831382748496587",
+    "gp_section_585837899757388483",
+    "product_block_jYT6kD"
+  ]
+}
